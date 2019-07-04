@@ -1,4 +1,4 @@
-const { getHash } = require('../../../helpers/hashToken');
+const { getHash } = require('../../helpers/hashToken');
 
 const usersQuery = `INSERT INTO users (
                 email, first_name, last_name, password, is_admin)
@@ -61,7 +61,7 @@ const bookingsQuery = `INSERT INTO bookings (
                         VALUES (5, 1, 4, 'LAGOS', 'PORTHARCOURT', 1);`;
 
 
-const seedQueries = `${usersQuery}${busesQuery}${tripsQuery}${bookingsQuery}`;
+const seedTableQuery = `${usersQuery}${busesQuery}${tripsQuery}${bookingsQuery}`;
 
 
-module.exports = seedQueries;
+module.exports = seedTableQuery;
