@@ -1,10 +1,5 @@
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-
 var _require = require('../../../helpers/hashToken'),
     getHash = _require.getHash;
 
@@ -13,5 +8,4 @@ var busesQuery = "INSERT INTO buses (\n                    plate_number, manufac
 var tripsQuery = "INSERT INTO trips (\n                    bus_id, origin, destination, fare, status, booking_status)\n                    VALUES (1, 'IBADAN', 'LAGOS', 2000, 'cancelled', 1);\n                    INSERT INTO trips (\n                    bus_id, origin, destination, fare, booking_status)\n                    VALUES (2, 'OSOGBO', 'LAGOS', 2000, 1);\n                    INSERT INTO trips (\n                    bus_id, origin, destination, fare, status, booking_status)\n                    VALUES (3, 'IBADAN', 'BENIN', 2000, 'cancelled', 1);\n                    INSERT INTO trips (\n                    bus_id, origin, destination, fare, booking_status)\n                    VALUES (4, 'IBADAN', 'ABUJA', 2000, 1);\n                    INSERT INTO trips (\n                    bus_id, origin, destination, fare, booking_status)\n                    VALUES (4, 'LAGOS', 'PORTHARCOURT', 2000, 1);";
 var bookingsQuery = "INSERT INTO bookings (\n                        trip_id, user_id, bus_id, origin, destination, seat_number)\n                        VALUES (1, 4, 1, 'IBADAN', 'LAGOS', 1);\n                        INSERT INTO bookings (\n                        trip_id, user_id, bus_id, origin, destination, seat_number)\n                        VALUES (2, 3, 2, 'OSOGBO', 'LAGOS', 1);\n                        INSERT INTO bookings (\n                        trip_id, user_id, bus_id, origin, destination, seat_number)\n                        VALUES (3, 2, 3, 'IBADAN', 'BENIN', 1);\n                        INSERT INTO bookings (\n                        trip_id, user_id, bus_id, origin, destination, seat_number)\n                        VALUES (4, 1, 4, 'IBADAN', 'ABUJA', 1);\n                        INSERT INTO bookings (\n                        trip_id, user_id, bus_id, origin, destination, seat_number)\n                        VALUES (5, 1, 4, 'LAGOS', 'PORTHARCOURT', 1);";
 var seedQueries = "".concat(usersQuery).concat(busesQuery).concat(tripsQuery).concat(bookingsQuery);
-var _default = seedQueries;
-exports["default"] = _default;
+module.exports = seedQueries;
