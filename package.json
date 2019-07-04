@@ -10,7 +10,7 @@
     "build": "babel src --out-dir dist",
     "serve": "node dist/index.js",
     "migrate": "node ./src/db/migrations/index.js --exit",
-    "cover": "npm run build && nyc npm test && nyc report --reporter=text-lcov | coveralls",
+    "cover": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
     "coveralls": "npm run cover --report lcovonly && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {

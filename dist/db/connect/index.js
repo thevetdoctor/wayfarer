@@ -1,29 +1,24 @@
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
+var _require = require('pg'),
+    Client = _require.Client;
 
-var _pg = require("pg");
+var configString = require('../config'); // import herokuconfig from '../config/herokuConfig';
+// import { Client } from 'pg';
+// import configString from '../config';
+// import herokuconfig from '../config/herokuConfig';
 
-var _config = _interopRequireDefault(require("../config"));
-
-var _herokuConfig = _interopRequireDefault(require("../config/herokuConfig"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var db;
 
 if (process.env.NODE_ENV === 'production') {
-  db = new _pg.Client({
-    connectionString: _herokuConfig["default"],
+  db = new Client({
+    connectionString: herokuconfig,
     ssl: true
   });
 } else {
-  db = new _pg.Client(_config["default"]);
+  db = new Client(configString);
 }
 
 db.connect();
-var _default = db;
-exports["default"] = _default;
+module.exports = db;
