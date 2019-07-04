@@ -1,14 +1,26 @@
 /* eslint-disable no-unused-vars */
-// import regenerator from 'regenerator-runtime';
-const drop = require('./dropTables');
-const create = require('./createTables');
-const seed = require('./seedTables');
+/* eslint-disable no-console */
+const db = require('../connect');
+const dropQuery = require('./dropQuery');
+const createQuery = require('./tableQuery');
+const seedQuery = require('./seedQuery');
 
 
 const migrate = async () => {
-  // const dropTables = await drop();
-  // const createTables = await create();
-  // const seedTables = await seed();
+  // drop tables
+  const drop = await db.query(dropQuery)
+    .then(result => console.log('Tables dropped'))
+    .catch(err => console.log(err));
+
+  // create tables
+  const create = await db.query(createQuery)
+    .then(result => console.log('Tables created'))
+    .catch(err => console.log(err));
+
+  // seed tables
+  const seed = await db.query(seedQuery)
+    .then(result => console.log('Tables seeded'))
+    .catch(err => console.log(err));
 };
 
 migrate();

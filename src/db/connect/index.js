@@ -1,6 +1,6 @@
 const { Client } = require('pg');
 const configString = require('../config');
-// import herokuconfig from '../config/herokuConfig';
+const herokuconfig = require('../config/herokuConfig');
 // import { Client } from 'pg';
 // import configString from '../config';
 // import herokuconfig from '../config/herokuConfig';

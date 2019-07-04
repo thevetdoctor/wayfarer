@@ -58,6 +58,6 @@ const deletedTable = `CREATE TABLE IF NOT EXISTS deletedbookings (
                         deleted_on TIMESTAMP WITH TIME ZONE DEFAULT NOW()
                         );`;
 
-const allTables = `${userTable}${busTable}${tripTable}${bookingTable}${deletedTable}`;
+const createTableQuery = `${userTable}${busTable}${tripTable}${bookingTable}${deletedTable}`;
 
-module.exports = allTables;
+module.exports = createTableQuery;

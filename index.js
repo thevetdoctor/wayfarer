@@ -1,7 +1,9 @@
+/* eslint-disable no-console */
 // Import dependencies
 import express from 'express';
 import path from 'path';
 import parser from 'body-parser';
+import users from './src/routes/user';
 
 // Setup Express server
 const app = express();
@@ -14,9 +16,12 @@ app.use(parser.json());
 app.use(parser.urlencoded({ extended: true }));
 
 
+// Declare Routes
+app.use('/api/v1/auth', users);
+
 // Declare root path
 app.get('/api/v1', (req, res) => {
-    res.sendFile(path.join(__dirname, '/index.html'));
+  res.sendFile(path.join(__dirname, '/index.html'));
 });
 
 // app.get('/*', (req, res) => {
@@ -25,7 +30,7 @@ app.get('/api/v1', (req, res) => {
 
 // Initialise Server
 app.listen(port, () => {
-    console.log(`Server started @ ${port}`);
+  console.log(`Server started @ ${port}`);
 });
 
 

@@ -9,6 +9,7 @@
     "dev": "npm run build && node dist/index.js",
     "build": "babel src --out-dir dist",
     "serve": "node dist/index.js",
+    "protest": "npm run migrate --exit",
     "migrate": "node ./src/db/migrations/index.js --exit",
     "cover": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
     "coveralls": "npm run cover --report lcovonly && cat ./coverage/lcov.info | coveralls"
