@@ -5,6 +5,7 @@ import path from 'path';
 import parser from 'body-parser';
 import users from './src/routes/user';
 import trips from './src/routes/trip';
+import bookings from './src/routes/booking';
 
 // Setup Express server
 const app = express();
@@ -20,6 +21,7 @@ app.use(parser.urlencoded({ extended: true }));
 // Declare Routes
 app.use('/api/v1/auth', users);
 app.use('/api/v1/trips', trips);
+app.use('/api/v1/bookings', bookings);
 
 // Declare root path
 app.get('/api/v1', (req, res) => {
