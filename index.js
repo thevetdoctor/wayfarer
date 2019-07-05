@@ -3,25 +3,20 @@
 import express from 'express';
 import path from 'path';
 import parser from 'body-parser';
-import users from './src/routes/user';
-import trips from './src/routes/trip';
-import bookings from './src/routes/booking';
+import routeHandler from './src/routes';
 
 // Setup Express server
 const app = express();
 
 // Declare PORT
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 4000;
 
 // Set body parser to make parameter acceptable
 app.use(parser.json());
 app.use(parser.urlencoded({ extended: true }));
 
-
-// Declare Routes
-app.use('/api/v1/auth', users);
-app.use('/api/v1/trips', trips);
-app.use('/api/v1/bookings', bookings);
+// Link routeHandler
+routeHandler(app);
 
 // Declare root path
 app.get('/api/v1', (req, res) => {

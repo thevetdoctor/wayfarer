@@ -41,7 +41,7 @@ const tripsQuery = `INSERT INTO trips (
                     VALUES (4, 'IBADAN', 'ABUJA', 2000, 1);
                     INSERT INTO trips (
                     bus_id, origin, destination, fare, booking_status)
-                    VALUES (4, 'LAGOS', 'PORTHARCOURT', 2000, 1);`;
+                    VALUES (4, 'LAGOS', 'PORTHARCOURT', 2000, 8);`;
 
 
 const bookingsQuery = `INSERT INTO bookings (
