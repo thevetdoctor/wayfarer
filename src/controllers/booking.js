@@ -6,7 +6,7 @@ import bookingQueries from '../helpers/bookingQueries';
 import db from '../db/connect';
 
 const {
-  checkUser, getTripsQuery, checkBookingQuery, updateTripQuery, bookingQuery,
+  checkUser, getTripsQuery, checkBookingQuery, updateTripQuery, bookingQuery, getBookingQuery,
 } = bookingQueries;
 
 
@@ -27,7 +27,7 @@ class BookingController {
         if (foundUser.length < 1) {
           res.status(404).json({
             status: 404,
-            message: 'User not registered',
+            error: 'User not registered',
           });
           return;
         }
@@ -97,8 +97,8 @@ class BookingController {
                           message: 'Your trip has been booked',
                         };
 
-                        res.status(200).json({
-                          status: 200,
+                        res.status(201).json({
+                          status: 201,
                           data,
                         });
                       })
@@ -109,6 +109,44 @@ class BookingController {
               .catch(err => console.log(err));
           })
           .catch(err => console.log(err));
+      })
+      .catch(err => console.log(err));
+  }
+
+
+  static getBookings(req, res) {
+    const { token, userId, isAdmin } = req.body;
+
+    db.query(getBookingQuery)
+      .then((result) => {
+        if (result.rows.length < 1) {
+          res.status(404).json({
+            status: 404,
+            error: 'No bookings on record',
+          });
+          return;
+        }
+
+        const data = result.rows.map(item => (
+          {
+            booking_id: item.id,
+            trip_id: item.trip_id,
+            user_id: item.user_id,
+            bus_id: item.bus_id,
+            origin: item.origin,
+            destination: item.destination,
+            trip_date: item.created_on,
+            seat_number: item.seat_number,
+            first_name: item.first_name,
+            last_name: item.last_name,
+            email: item.email,
+          }
+        ));
+
+        res.status(200).json({
+          status: 200,
+          data,
+        });
       })
       .catch(err => console.log(err));
   }
