@@ -4,7 +4,7 @@
   "description": "a public bus transportation API",
   "main": "index.js",
   "scripts": {
-    "test": "SET NODE_ENV=test && mocha ./src/test --require @babel/register --exit",
+    "test": "mocha ./src/test --require @babel/register --exit",
     "start": "nodemon --exec babel-node index.js",
     "dev": "npm run build && node dist/index.js",
     "build": "babel src --out-dir dist",

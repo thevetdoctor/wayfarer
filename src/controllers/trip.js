@@ -4,7 +4,7 @@
 import tripQueries from '../helpers/tripQueries';
 import db from '../db/connect';
 
-const { createTripQuery, findBusQuery } = tripQueries;
+const { createTripQuery, findBusQuery, getAllTripsQuery } = tripQueries;
 
 
 class TripController {
@@ -44,6 +44,38 @@ class TripController {
               });
             })
             .catch(err => console.log(err));
+        }
+      })
+      .catch(err => console.log(err));
+  }
+
+
+  static getTrips(req, res) {
+    db.query(getAllTripsQuery)
+      .then((result) => {
+        if (result.rows.length < 1) {
+          res.status(204).json({
+            status: 204,
+            data: 'No trips available',
+          });
+        } else {
+          const trips = result.rows.map(item => (
+            {
+              trip_id: item.id,
+              bus_id: item.bus_id,
+              origin: item.origin,
+              destination: item.destination,
+              trip_date: item.trip_date,
+              booking_status: item.booking_status,
+              passengers: item.passengers,
+              fare: item.fare,
+              status: item.status,
+            }));
+
+          res.status(200).json({
+            status: 200,
+            data: trips,
+          });
         }
       })
       .catch(err => console.log(err));

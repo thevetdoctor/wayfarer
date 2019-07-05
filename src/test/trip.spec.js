@@ -29,7 +29,7 @@ before((done) => {
       res.body.status.should.equal(200);
       res.body.data.should.be.a('object');
       const { token } = res.body.data;
-      console.log(res.body.data);
+      // console.log(res.body.data);
       adminToken = token;
 
 
@@ -59,7 +59,7 @@ before((done) => {
               res.body.should.be.have.property('status');
               res.body.should.be.have.property('data');
               res.body.status.should.equal(201);
-              res.body.data.should.be.a('object');
+              res.body.data.should.be.a('string');
             });
           done();
         });
@@ -104,6 +104,25 @@ before((done) => {
               res.body.should.be.have.property('error');
               res.body.status.should.equal(400);
               res.body.error.should.be.a('string');
+            });
+          done();
+        });
+
+        it('Get Trips method (GET) should exist', () => {
+          TripController.getTrips.should.exist;
+        });
+
+        it('Get Trips method (POST) should retrieve all available trips on record', (done) => {
+          chai.request(server)
+            .get('/api/v1/trips')
+            .end((err, res) => {
+              res.should.have.status(200);
+              res.should.be.json;
+              res.body.should.be.a('object');
+              res.body.should.be.have.property('status');
+              res.body.should.be.have.property('data');
+              res.body.status.should.equal(200);
+              res.body.data.should.be.a('object');
             });
           done();
         });
