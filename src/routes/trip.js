@@ -11,5 +11,7 @@ router.get('/', TripController.getTrips);
 
 router.patch('/:tripId', auth, TripController.cancelTrip);
 
+router.get('/:search', TripController.filterTrip);
+
 
 module.exports = router;
