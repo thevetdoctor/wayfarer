@@ -4,12 +4,12 @@
   "description": "a public bus transportation API",
   "main": "index.js",
   "scripts": {
-    "test": "mocha ./src/test --require @babel/register --exit",
+    "test": "SET NODE_ENV=test && mocha ./src/test --require @babel/register --exit",
     "start": "nodemon --exec babel-node index.js",
     "dev": "npm run build && node dist/index.js",
     "build": "babel src --out-dir dist",
     "serve": "node dist/index.js",
-    "protest": "npm run migrate --exit",
+    "protest": "SET NODE_ENV=test && npm run migrate",
     "migrate": "node ./src/db/migrations/index.js --exit",
     "cover": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
     "coveralls": "npm run cover --report lcovonly && cat ./coverage/lcov.info | coveralls"

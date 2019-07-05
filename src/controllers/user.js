@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import userQueries from '../helpers/userQueries';
 import db from '../db/connect';
-import { getHash, getToken } from '../helpers/hashToken';
+import { getHash, getToken, getCompared } from '../helpers/hashToken';
 
 const { createUserQuery, findUserQuery } = userQueries;
 
@@ -58,6 +58,50 @@ class UserController {
               err,
             });
           });
+      })
+      .catch((err) => {
+        res.status(400).json({
+          status: 400,
+          err,
+        });
+      });
+  }
+
+
+  static signIn(req, res) {
+    const {
+      email, password,
+    } = req.body;
+
+    db.query(findUserQuery, [email])
+      .then((result1) => {
+        const loggedUser = result1.rows[0];
+
+        if (loggedUser) {
+          const compared = getCompared(password, loggedUser.password);
+
+          if (compared) {
+            delete loggedUser.password;
+            const token = getToken(loggedUser);
+            const loggedDetails = { user_id: loggedUser.id, is_admin: loggedUser.is_admin, token };
+
+            res.status(200).json({
+              status: 200,
+              data: loggedDetails,
+            });
+          } else {
+            res.status(400).json({
+              status: 400,
+              error: 'Password is invalid',
+            });
+          }
+        } else {
+          res.status(400).json({
+            status: 400,
+            error: 'Email is invalid',
+          });
+        }
+        // db.end();
       })
       .catch((err) => {
         res.status(400).json({
