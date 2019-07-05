@@ -9,5 +9,7 @@ router.post('/', auth, TripController.createTrip);
 
 router.get('/', TripController.getTrips);
 
+router.patch('/:tripId', auth, TripController.cancelTrip);
+
 
 module.exports = router;

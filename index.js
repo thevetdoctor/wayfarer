@@ -9,7 +9,7 @@ import routeHandler from './src/routes';
 const app = express();
 
 // Declare PORT
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 
 // Set body parser to make parameter acceptable
 app.use(parser.json());

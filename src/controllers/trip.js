@@ -4,7 +4,9 @@
 import tripQueries from '../helpers/tripQueries';
 import db from '../db/connect';
 
-const { createTripQuery, findBusQuery, getAllTripsQuery } = tripQueries;
+const {
+  createTripQuery, findBusQuery, getAllTripsQuery, cancelTripQuery,
+} = tripQueries;
 
 
 class TripController {
@@ -77,6 +79,31 @@ class TripController {
             data: trips,
           });
         }
+      })
+      .catch(err => console.log(err));
+  }
+
+
+  static cancelTrip(req, res) {
+    const { token, userId, isAdmin } = req.body;
+    const { tripId } = req.params;
+
+
+    db.query(cancelTripQuery, ['cancelled', tripId])
+      .then((result) => {
+        const cancelledTrip = result.rows[0];
+
+        if (!cancelledTrip) {
+          res.status(404).json({
+            error: 'Trip neither found nor updated',
+          });
+          return;
+        }
+
+        res.status(205).json({
+          status: 205,
+          message: 'Trip cancelled successfully',
+        });
       })
       .catch(err => console.log(err));
   }

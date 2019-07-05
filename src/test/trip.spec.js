@@ -112,7 +112,7 @@ before((done) => {
           TripController.getTrips.should.exist;
         });
 
-        it('Get Trips method (POST) should retrieve all available trips on record', (done) => {
+        it('Get Trips method (GET) should retrieve all available trips on record', (done) => {
           chai.request(server)
             .get('/api/v1/trips')
             .end((err, res) => {
@@ -126,7 +126,49 @@ before((done) => {
             });
           done();
         });
-      });
+
+        it('Cancel Trip method (PATCH) should exist', () => {
+          TripController.cancelTrip.should.exist;
+        });
+
+        it('Cancel Trip method (PATCH) should cancel a specific trip', (done) => {
+          chai.request(server)
+            .patch('/api/v1/trips/1')
+            .set('Authorization', `Bearer ${adminToken}`)
+            .send({
+              status: 'cancelled',
+            })
+            .end((err, res) => {
+              res.should.have.status(205);
+              res.should.be.json;
+              res.body.should.be.a('object');
+              res.body.should.be.have.property('status');
+              res.body.should.be.have.property('message');
+              res.body.status.should.equal(205);
+              res.body.data.should.be.a('string');
+            });
+          done();
+        });
+
+        it('Cancel Trip method (PATCH) should return an ERROR if trip is not found', (done) => {
+          chai.request(server)
+            .patch('/api/v1/trips/0')
+            .set('Authorization', `Bearer ${adminToken}`)
+            .send({
+              status: 'cancelled',
+            })
+            .end((err, res) => {
+              res.should.have.status(404);
+              res.should.be.json;
+              res.body.should.be.a('object');
+              res.body.should.be.have.property('status');
+              res.body.should.be.have.property('error');
+              res.body.status.should.equal(404);
+              res.body.data.should.be.a('string');
+            });
+          done();
+        });
+      }); // End of top level 'describe' function
     });
   done();
-});
+}); // End of before hook function

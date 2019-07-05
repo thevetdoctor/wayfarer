@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
+/* eslint-disable max-len */
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-expressions */
 import chai, { should } from 'chai';
@@ -160,7 +161,7 @@ describe('Testing Bookings Endpoints', () => {
 
   it('Delete Booking method (DELETE) should delete a specific booking', (done) => {
     chai.request(server)
-      .delete('/api/v1/bookings/1')
+      .delete('/api/v1/bookings/4')
       .end((err, res) => {
         res.should.have.status(200);
         res.should.be.json;
@@ -172,6 +173,7 @@ describe('Testing Bookings Endpoints', () => {
       });
     done();
   });
+
   it('Delete Booking method (DELETE) should return an ERROR if booking is not found', (done) => {
     chai.request(server)
       .delete('/api/v1/bookings/0')
@@ -186,6 +188,7 @@ describe('Testing Bookings Endpoints', () => {
       });
     done();
   });
+
   it('Delete Booking method (DELETE) should return an ERROR if booking is found but not deleted', (done) => {
     chai.request(server)
       .delete('/api/v1/bookings/1')
