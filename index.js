@@ -4,12 +4,13 @@ import express from 'express';
 import path from 'path';
 import parser from 'body-parser';
 import users from './src/routes/user';
+import trips from './src/routes/trip';
 
 // Setup Express server
 const app = express();
 
 // Declare PORT
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8000;
 
 // Set body parser to make parameter acceptable
 app.use(parser.json());
@@ -18,6 +19,7 @@ app.use(parser.urlencoded({ extended: true }));
 
 // Declare Routes
 app.use('/api/v1/auth', users);
+app.use('/api/v1/trips', trips);
 
 // Declare root path
 app.get('/api/v1', (req, res) => {
