@@ -6,7 +6,7 @@ import bookingQueries from '../helpers/bookingQueries';
 import db from '../db/connect';
 
 const {
-  checkUser, getTripsQuery, checkBookingQuery, updateTripQuery, bookingQuery, getBookingQuery,
+  checkUser, getTripsQuery, checkBookingQuery, updateTripQuery, bookingQuery, getBookingQuery, deleteBookingQuery, updateTripWithDeletedBookingQuery, deletedBookingQuery,
 } = bookingQueries;
 
 
@@ -147,6 +147,67 @@ class BookingController {
           status: 200,
           data,
         });
+      })
+      .catch(err => console.log(err));
+  }
+
+
+  static deleteBooking(req, res) {
+    const { token, userId, isAdmin } = req.body;
+    const { bookingId } = req.params;
+
+    // console.log(bookingId, userId);
+
+    const checkData = [userId, bookingId];
+
+
+    db.query(checkBookingQuery, checkData)
+      .then((result1) => {
+        if (result1.rows.length < 1) {
+          res.status(404).json({
+            status: 404,
+            error: 'No such booking found',
+          });
+          return;
+        }
+
+        db.query(deleteBookingQuery, [bookingId])
+          .then((result2) => {
+            const data = result2.rows[0];
+            // console.log(data);
+
+            if (data === undefined) {
+              res.status(404).json({
+                status: 404,
+                error: 'Booking found but not deleted',
+              });
+              return;
+            }
+            // console.log('tripId', result1.rows[0].trip_id);
+            const updateTripWithDeletedBookingData = [1, result1.rows[0].trip_id];
+
+            db.query(updateTripWithDeletedBookingQuery, updateTripWithDeletedBookingData)
+              .then((result3) => {
+                const deleted = result3.rows;
+                // console.log(deleted);
+
+                const deletedBookingData = Object.values(data);
+                // console.log(deletedBookingData);
+
+                db.query(deletedBookingQuery, deletedBookingData)
+                  .then((result4) => {
+                    // console.log(result4.rows);
+
+                    res.status(200).json({
+                      status: 200,
+                      message: 'Booking deleted successfully',
+                    });
+                  })
+                  .catch(err => console.log(err));
+              })
+              .catch(err => console.log(err));
+          })
+          .catch(err => console.log(err));
       })
       .catch(err => console.log(err));
   }
