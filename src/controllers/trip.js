@@ -107,6 +107,43 @@ class TripController {
       })
       .catch(err => console.log(err));
   }
+
+
+  static async filterTrip(req, res) {
+    const { token, userId, isAdmin } = req.body;
+    const { search } = req.params;
+    const { origin } = req.query;
+
+    // console.log(req.params);
+    // console.log(req.query);
+    // console.log(origin);
+
+    if (search && search === 'search') {
+      if (origin && origin !== '') {
+        const { rows } = await db.query('SELECT * FROM trips INNER JOIN buses ON trips.bus_id = buses.id WHERE trips.origin = $1', [origin]);
+
+        if (rows.length > 0) {
+          // console.log(rows);
+          res.status(200).json({
+            status: 200,
+            rows,
+          });
+        } else {
+          console.log('No trips');
+          res.status(404).json({
+            status: 404,
+            message: `No trips available from ${origin}`,
+          });
+        }
+        return;
+      }
+      return;
+    }
+    res.status(400).json({
+      status: 400,
+      error: 'Incorrect search parameter',
+    });
+  }
 }
 
 
