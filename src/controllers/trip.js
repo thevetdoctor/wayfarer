@@ -1,11 +1,17 @@
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 // const Trip = require('../models/trip');
+import regeneratorRuntime from 'regenerator-runtime';
 import tripQueries from '../helpers/tripQueries';
 import db from '../db/connect';
 
+
 const {
-  createTripQuery, findBusQuery, getAllTripsQuery, cancelTripQuery,
+  createTripQuery,
+  findBusQuery,
+  getAllTripsQuery,
+  cancelTripQuery,
+  filterQuery,
 } = tripQueries;
 
 
@@ -112,15 +118,16 @@ class TripController {
   static async filterTrip(req, res) {
     const { token, userId, isAdmin } = req.body;
     const { search } = req.params;
-    const { origin } = req.query;
+    const { origin, destination } = req.query;
 
     // console.log(req.params);
     // console.log(req.query);
-    // console.log(origin);
+    // console.log('origin', origin);
+    // console.log('destination', destination);
 
     if (search && search === 'search') {
-      if (origin && origin !== '') {
-        const { rows } = await db.query('SELECT * FROM trips INNER JOIN buses ON trips.bus_id = buses.id WHERE trips.origin = $1', [origin]);
+      if (origin && origin !== '' && origin !== undefined) {
+        const { rows } = await db.query(filterQuery, [origin]);
 
         if (rows.length > 0) {
           // console.log(rows);
@@ -129,7 +136,7 @@ class TripController {
             rows,
           });
         } else {
-          console.log('No trips');
+          console.log(`No trips available from ${origin}`);
           res.status(404).json({
             status: 404,
             message: `No trips available from ${origin}`,
@@ -137,6 +144,29 @@ class TripController {
         }
         return;
       }
+
+      if (destination && destination !== '' && destination !== undefined) {
+        const { rows } = await db.query(filterQuery, [destination]);
+
+        if (rows.length > 0) {
+          // console.log(rows);
+          res.status(200).json({
+            status: 200,
+            rows,
+          });
+        } else {
+          console.log(`No trips available to ${destination}`);
+          res.status(404).json({
+            status: 404,
+            message: `No trips available to ${destination}`,
+          });
+        }
+        return;
+      }
+      res.status(400).json({
+        status: 400,
+        error: 'No search query',
+      });
       return;
     }
     res.status(400).json({
