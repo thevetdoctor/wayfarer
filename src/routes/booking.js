@@ -11,5 +11,9 @@ router.get('/', BookingController.getBookings);
 
 router.delete('/:bookingId', BookingController.deleteBooking);
 
+router.get('/swap/:bookingId', BookingController.checkAvailableSeats);
+
+router.patch('/:bookingId', BookingController.changeSeat);
+
 
 module.exports = router;

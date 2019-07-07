@@ -6,7 +6,7 @@ import bookingQueries from '../helpers/bookingQueries';
 import db from '../db/connect';
 
 const {
-  checkUser, getTripsQuery, checkBookingQuery, updateTripQuery, bookingQuery, getBookingQuery, deleteBookingQuery, updateTripWithDeletedBookingQuery, deletedBookingQuery,
+  checkUser, getTripsQuery, checkBookingQuery, updateTripQuery, bookingQuery, getBookingQuery, deleteBookingQuery, updateTripWithDeletedBookingQuery, deletedBookingQuery, checkTrip, checkSeats, checkSeatsOnTrip, updateSeatsOnTrip, updateSeatsOnBooking,
 } = bookingQueries;
 
 
@@ -17,7 +17,7 @@ class BookingController {
     } = req.body;
 
     // const newBooking = new Booking(userId, tripId);
-    const updateData = [1, tripId];
+    const updateData = [tripId];
     const bookingData = [userId, tripId];
 
 
@@ -77,8 +77,10 @@ class BookingController {
                 db.query(updateTripQuery, updateData)
                   .then((result3) => {
                     const tripUpdate = result3.rows[0];
+                    const seatNo = tripUpdate.booked_seats[tripUpdate.booked_seats.length - 1];
+                    console.log(seatNo);
 
-                    const moreBookingData = [foundTrip.bus_id, foundTrip.origin, foundTrip.destination, tripUpdate.trip_date, tripUpdate.booking_status];
+                    const moreBookingData = [foundTrip.bus_id, foundTrip.origin, foundTrip.destination, tripUpdate.trip_date, seatNo];
                     const completeBookingData = [...bookingData, ...moreBookingData];
 
                     db.query(bookingQuery, completeBookingData)
@@ -210,6 +212,103 @@ class BookingController {
           .catch(err => console.log(err));
       })
       .catch(err => console.log(err));
+  }
+
+  static async checkAvailableSeats(req, res) {
+    const { token, userId, isAdmin } = req.body;
+    const { bookingId } = req.params;
+
+    const { rows } = await db.query(checkTrip, [bookingId, 1]);
+
+    if (rows.length) {
+      console.log('bookingId ->', bookingId);
+      console.log('tripId ->', rows[0].trip_id);
+
+      const seats = await db.query(checkSeats, [rows[0].trip_id]);
+
+      const oldSeatNumber = rows[0].seat_number;
+      console.log('old seat number', oldSeatNumber);
+
+      if (seats.rows.length) {
+        const freeSeats = seats.rows[0].free_seats;
+        const bookedSeats = seats.rows[0].booked_seats;
+        console.log('free seats', freeSeats);
+        console.log('booked seats', bookedSeats);
+        let availableSeats = seats.rows[0].capacity - seats.rows[0].booked_seats.length;
+        availableSeats = availableSeats > 0 ? `${seats.rows[0].free_seats.length} seats available! ` : 'Seats gone';
+
+
+        res.status(200).json({
+          status: 200,
+          tripId: seats.rows[0].id,
+          yourSeatNumber: oldSeatNumber,
+          freeSeats,
+          availableSeats,
+        });
+      }
+    } else {
+      console.log('Booking not found!');
+      res.status(404).json({
+        status: 404,
+        error: 'Booking not found!',
+      });
+    }
+  }
+
+
+  static async changeSeat(req, res) {
+    const { tripId } = req.body;
+    let { oldSeatNumber, newSeatNumber } = req.body;
+    const { bookingId } = req.params;
+    oldSeatNumber = parseInt(oldSeatNumber, 10);
+    newSeatNumber = parseInt(newSeatNumber, 10);
+
+    const { rows } = await db.query(checkSeatsOnTrip, [tripId]);
+
+    // console.log('old seat number', oldSeatNumber);
+    // console.log('new seat number', newSeatNumber);
+
+    if (rows.length) {
+      const freeSeats = rows[0].free_seats;
+      const bookedSeats = rows[0].booked_seats;
+      // console.log('free seats', freeSeats);
+      // console.log('booked seats', bookedSeats);
+
+      if (!bookedSeats.filter(item => item === oldSeatNumber).length) {
+        console.log('Your old seat number not found in booked seats!');
+        res.status(404).json({
+          status: 404,
+          error: 'Seat number not found',
+        });
+        return;
+      }
+      if (freeSeats.filter(item => item === newSeatNumber).length) {
+        freeSeats.splice(freeSeats.indexOf(newSeatNumber), 1, oldSeatNumber);
+        bookedSeats.splice(bookedSeats.indexOf(oldSeatNumber), 1, newSeatNumber);
+
+        // console.log(oldSeatNumber, newSeatNumber);
+        // console.log(freeSeats.filter(item => item === newSeatNumber));
+        // console.log(freeSeats.filter(item => item === oldSeatNumber));
+        // console.log(freeSeats, bookedSeats);
+        const updateTrip = await db.query(updateSeatsOnTrip, [bookedSeats.length, freeSeats, bookedSeats, tripId]);
+
+        console.log(updateTrip.rows);
+
+        const seatChanged = await db.query(updateSeatsOnBooking, [newSeatNumber, bookingId]);
+        if (seatChanged) {
+          res.status(200).json({
+            status: 200,
+            data: rows[0],
+            message: `Your seat number has been changed from ${oldSeatNumber} to ${newSeatNumber}`,
+          });
+        }
+      } else {
+        res.status(404).json({
+          status: 404,
+          error: 'Please reconfirm ew seat number, the seat may have just been taken!',
+        });
+      }
+    }
   }
 }
 

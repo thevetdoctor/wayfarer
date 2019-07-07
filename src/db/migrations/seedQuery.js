@@ -28,20 +28,20 @@ const busesQuery = `INSERT INTO buses (
                     VALUES ('EKY06CC', 'TOYOTA', 'SIENNA', '2000', 8);`;
 
 const tripsQuery = `INSERT INTO trips (
-                    bus_id, origin, destination, fare, status, booking_status)
-                    VALUES (1, 'IBADAN', 'LAGOS', 2000, 'cancelled', 1);
+                    bus_id, origin, destination, fare, status, booking_status, free_seats, booked_seats, passengers)
+                    VALUES (1, 'IBADAN', 'LAGOS', 2000, 'cancelled', 1, '{2,3,4,5}', '{1}', 1);
                     INSERT INTO trips (
-                    bus_id, origin, destination, fare, booking_status)
-                    VALUES (2, 'OSOGBO', 'LAGOS', 2000, 1);
+                    bus_id, origin, destination, fare, booking_status, free_seats, booked_seats, passengers)
+                    VALUES (2, 'OSOGBO', 'LAGOS', 2000, 1, '{2,3,4,5}', '{1}', 1);
                     INSERT INTO trips (
-                    bus_id, origin, destination, fare, status, booking_status)
-                    VALUES (3, 'IBADAN', 'BENIN', 2000, 'cancelled', 1);
+                    bus_id, origin, destination, fare, status, booking_status, free_seats, booked_seats, passengers)
+                    VALUES (3, 'IBADAN', 'BENIN', 2000, 'cancelled', 1, '{2,3,4,5}', '{1}', 1);
                     INSERT INTO trips (
-                    bus_id, origin, destination, fare, booking_status)
-                    VALUES (4, 'IBADAN', 'ABUJA', 2000, 1);
+                    bus_id, origin, destination, fare, booking_status, free_seats, booked_seats, passengers)
+                    VALUES (4, 'IBADAN', 'ABUJA', 2000, 1, '{2,3,4,5,6,7,8}', '{1}', 1);
                     INSERT INTO trips (
-                    bus_id, origin, destination, fare, booking_status)
-                    VALUES (4, 'LAGOS', 'PORTHARCOURT', 2000, 8);`;
+                    bus_id, origin, destination, fare, booking_status, free_seats, booked_seats, passengers)
+                    VALUES (4, 'LAGOS', 'PORTHARCOURT', 2000, 8, '{}', '{1,2,3,4,5,6,7,8}', 8);`;
 
 
 const bookingsQuery = `INSERT INTO bookings (

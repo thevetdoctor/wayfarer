@@ -5,11 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha ./src/test --require @babel/register --exit",
-    "start": "nodemon --exec babel-node index.js",
-    "dev": "npm run build && node dist/index.js",
+    "start": "babel-node index.js",
+    "dev": "nodemon --exec babel-node index.js",
+    "devt": "npm run build && node dist/index.js",
     "build": "babel src --out-dir dist",
     "serve": "node dist/index.js",
-    "migrate": "SET NODE_ENV=test && node ./src/db/migrations/index.js && --exit",
+    "migrate": "SET NODE_ENV=test && node ./src/db/migrations/index.js && exit=0",
     "cover": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
     "coveralls": "npm run cover --report lcovonly && cat ./coverage/lcov.info | coveralls"
   },

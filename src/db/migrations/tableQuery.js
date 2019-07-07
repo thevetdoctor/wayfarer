@@ -26,7 +26,9 @@ const tripTable = `CREATE TABLE IF NOT EXISTS trips (
                     fare NUMERIC(10, 2) NOT NULL,
                     status TEXT DEFAULT 'active',
                     booking_status INT DEFAULT 0,
-                    passengers TEXT DEFAULT 'none',
+                    free_seats INT[],
+                    booked_seats INT[],
+                    passengers INT DEFAULT 0,
                     FOREIGN KEY (bus_id) REFERENCES buses (id)
                     );`;
 
