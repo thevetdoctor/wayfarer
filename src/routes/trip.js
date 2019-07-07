@@ -5,7 +5,7 @@ const auth = require('../auth');
 const router = express.Router();
 
 
-router.post('/', auth, TripController.createTrip);
+router.post('/', TripController.createTrip);
 
 router.get('/', TripController.getTrips);
 

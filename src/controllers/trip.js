@@ -75,6 +75,8 @@ class TripController {
               destination: item.destination,
               trip_date: item.trip_date,
               booking_status: item.booking_status,
+              free_seats: item.free_seats,
+              booked_seats: item.booked_seats,
               passengers: item.passengers,
               fare: item.fare,
               status: item.status,
