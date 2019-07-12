@@ -7,7 +7,7 @@ class BusController {
   static getBuses(req, res) {
     Bus.getAll()
       .then((buses) => {
-        console.log(buses);
+        // console.log(buses);
         if (buses.length < 1) {
           res.status(204).json({
             status: 204,

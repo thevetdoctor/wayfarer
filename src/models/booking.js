@@ -5,7 +5,7 @@ import bookingQueries from '../helpers/bookingQueries';
 
 
 const {
-  checkUser,
+  checkUserQuery,
   getTripsQuery,
   checkBookingQuery,
   updateTripQuery,
@@ -23,126 +23,120 @@ const {
 
 
 class Booking {
-  constructor(busId, origin, destination, fare) {
+  constructor(userId, tripId) {
     this.id = null;
-    this.busId = busId;
-    this.origin = origin;
-    this.destination = destination;
+    this.tripId = tripId;
+    this.userId = userId;
+    this.busId = null;
+    this.origin = null;
+    this.destination = null;
     this.tripDate = null;
-    this.fare = fare;
-    this.status = null;
+    this.seatNumber = null;
+    this.createdOn = null;
   }
 
 
-  async findBus(busId) {
-    // const tripDetails = [busId, origin, destination, fare];
-
-    const { rows } = await db.query(findBusQuery, [this.busId]);
-    // const busFound = rows[0];
-    return rows;
+  async userCheck(userId) {
+    const { rows } = await db.query(checkUserQuery);
+    const foundUser = rows.filter(user => user.id === parseInt(this.userId, 10));
+    return foundUser;
   }
 
 
-  alreadyAssigned(bus, res) {
-    // //
+  static notRegistered(res) {
     return res.status(404).json({
       status: 404,
-      error: `Bus with ID ${this.busId} & PLATE-NUMBER ${bus[0].plate_number} is already assigned`,
+      error: 'User not registered',
+    });
+  }
+
+  static notAvailable(res) {
+    // console.log(this.userId);
+    return res.status(404).json({
+      status: 404,
+      error: 'Trip is not available',
+    });
+  }
+
+  static tripCancelled(res) {
+    return res.status(404).json({
+      status: 404,
+      error: 'Trip has been cancelled',
     });
   }
 
 
-  async create(details, res) {
-    const { rows } = await db.query(createTripQuery, this.details);
-    console.log('rows', rows);
-    return res.status(201).json({
-      status: 201,
-      data: 'Trip created',
+  static fullyBooked(res) {
+    return res.status(404).json({
+      status: 404,
+      error: 'Sorry please, No more empty seats- Trip is fully booked',
+    });
+  }
+
+  static tripResponse(foundTrip, res) {
+    if (!foundTrip) {
+      Booking.notAvailable(res);
+    }
+
+    if (foundTrip.status === 'cancelled') {
+      Booking.tripCancelled(res);
+    }
+
+    if (foundTrip.booking_status === foundTrip.capacity) {
+      Booking.fullyBooked(res);
+    }
+    return true;
+  }
+
+  static alreadyBooked(res) {
+    return res.status(404).json({
+      status: 404,
+      error: 'You are booked on this trip already',
     });
   }
 
 
-  static async getAll() {
-    const { rows } = await db.query(getAllTripsQuery);
+  async checkTrip(tripId, res) {
+    const { rows } = await db.query(getTripsQuery, [this.tripId]);
+    const foundTrip = rows[0];
+    return foundTrip;
+  }
 
+
+  async checkBooking(res) {
+    const { rows } = await db.query(checkBookingQuery, [this.userId, this.tripId]);
+    // const tripBooked = rows[0];
     return rows;
   }
 
 
-  static showAll(rows, res) {
-    const trips = rows.map(item => (
-      {
-        trip_id: item.id,
-        bus_id: item.bus_id,
-        origin: item.origin,
-        destination: item.destination,
-        trip_date: item.trip_date,
-        booking_status: item.booking_status,
-        free_seats: item.free_seats,
-        booked_seats: item.booked_seats,
-        passengers: item.passengers,
-        fare: item.fare,
-        status: item.status,
-      }));
-
-    res.status(200).json({
-      status: 200,
-      data: trips,
-    });
+  async updateTrip() {
+    const { rows } = db.query(updateTripQuery, [this.tripId]);
+    return rows;
   }
 
-  // static async checkCancelled(tripId, res) {
-  //     const checkedTrip = await db.query(checkTripQuery, [tripId]);
-  //     console.log('checking', checkedTrip.rows.length);
-  //     if (checkedTrip.rows.length < 1) {
-  //         res.status(404).json({
-  //             status: 404,
-  //             error: 'Trip not found',
-  //         });
-  //         return;
-  //     }
-  //     if (checkedTrip.rows[0].status === 'cancelled') {
-  //         res.status(404).json({
-  //             status: 404,
-  //             error: 'Already cancelled',
-  //         });
-  //         return;
-  //     }
-  //     const { rows } = await db.query(cancelTripQuery, ['cancelled', tripId]);
 
-  //     console.log('updated', rows);
-  //     if (!rows) {
-  //         res.status(404).json({
-  //             status: 404,
-  //             error: 'Trip neither found nor updated',
-  //         });
-  //         return;
-  //     }
+  static async makeBooking(tripUpdate, completeBookingData, res) {
+    const { rows } = await db.query(bookingQuery, completeBookingData);
+    const booking = rows[0];
 
-  //     res.status(205).json({
-  //         status: 205,
-  //         message: 'Trip cancelled successfully',
-  //     });
-  // }
+    const data = {
+      booking_id: booking.id,
+      trip_id: booking.trip_id,
+      user_id: booking.user_id,
+      bus_id: booking.bus_id,
+      origin: booking.origin,
+      destination: booking.destination,
+      trip_date: tripUpdate.trip_date,
+      seat_number: tripUpdate.booking_status,
+      message: 'Your trip has been booked',
+    };
 
-  // static async filter(origin = 'origin', res) {
-  //     const { rows } = await db.query(filterByOriginQuery, [origin]);
-
-  //     if (rows.length > 0) {
-  //         console.log(origin);
-  //         res.status(200).json({
-  //             status: 200,
-  //             rows,
-  //         });
-  //     } else {
-  //         const from = origin === 'origin' ? 'from' : 'to';
-  //         console.log(`No trips available ${from} ${origin}`);
-  //         res.status(404).json({
-  //             status: 404,
-  //             message: `No trips available ${from} ${origin}`,
-  //         });
-  //     }
-  // }
+    res.status(201).json({
+      status: 201,
+      data,
+    });
+  }
 }
 
 

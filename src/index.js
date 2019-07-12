@@ -4,7 +4,7 @@
 import express from 'express';
 import path from 'path';
 import parser from 'body-parser';
-import routeHandler from './src/routes';
+import routeHandler from './routes';
 // import { config } from 'dot-env';
 
 // Setup Express server
