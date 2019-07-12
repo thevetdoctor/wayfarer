@@ -2,7 +2,8 @@
 const { Client } = require('pg');
 // const configString = require('../config');
 const testConfig = require('../config/wayfare_testdb');
-const herokuconfig = require('../config/herokuConfig');
+const { herokuconfig } = require('../config/herokuConfig');
+// const { data } = require('../config/herokuConfig');
 // import { Client } from 'pg';
 // import configString from '../config';
 // import herokuconfig from '../config/herokuConfig';
@@ -10,7 +11,8 @@ const herokuconfig = require('../config/herokuConfig');
 
 let db;
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV !== 'production') {
+  console.log('heroku wayfare DB');
   db = new Client({
     connectionString: herokuconfig,
     ssl: true,
@@ -21,8 +23,9 @@ if (process.env.NODE_ENV === 'production') {
 } else {
   // console.log('wayfare DB');
   console.log('wayfare_test DB');
-  // db = new Client(configString);
+  // db = new Client(herokuconfig);
   db = new Client(testConfig);
+  // db = new Client(data);
 }
 
 db.connect();

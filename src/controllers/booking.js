@@ -2,11 +2,24 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable max-len */
 import bookingQueries from '../helpers/bookingQueries';
-// import Booking from '../models/booking';
+import Booking from '../models/booking';
 import db from '../db/connect';
 
 const {
-  checkUser, getTripsQuery, checkBookingQuery, updateTripQuery, bookingQuery, getBookingQuery, deleteBookingQuery, updateTripWithDeletedBookingQuery, deletedBookingQuery, checkTrip, checkSeats, checkSeatsOnTrip, updateSeatsOnTrip, updateSeatsOnBooking,
+  checkUser,
+  getTripsQuery,
+  checkBookingQuery,
+  updateTripQuery,
+  bookingQuery,
+  getBookingQuery,
+  deleteBookingQuery,
+  updateTripWithDeletedBookingQuery,
+  deletedBookingQuery,
+  checkTrip,
+  checkSeats,
+  checkSeatsOnTrip,
+  updateSeatsOnTrip,
+  updateSeatsOnBooking,
 } = bookingQueries;
 
 
@@ -218,7 +231,7 @@ class BookingController {
     const { token, userId, isAdmin } = req.body;
     const { bookingId } = req.params;
 
-    const { rows } = await db.query(checkTrip, [bookingId, 1]);
+    const { rows } = await db.query(checkTrip, [bookingId, userId]);
 
     if (rows.length) {
       console.log('bookingId ->', bookingId);
@@ -243,6 +256,7 @@ class BookingController {
           tripId: seats.rows[0].id,
           yourSeatNumber: oldSeatNumber,
           freeSeats,
+          bookedSeats,
           availableSeats,
         });
       }
@@ -305,7 +319,7 @@ class BookingController {
       } else {
         res.status(404).json({
           status: 404,
-          error: 'Please reconfirm ew seat number, the seat may have just been taken!',
+          error: 'Please reconfirm new seat number, the seat may have just been taken!',
         });
       }
     }
