@@ -16,8 +16,9 @@ var _require2 = require('../config/herokuConfig'),
 
 var db;
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV === 'production') {
   console.log('heroku wayfare DB');
+  console.log(herokuconfig);
   db = new Client({
     connectionString: herokuconfig,
     ssl: true
