@@ -2,11 +2,24 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable max-len */
 import bookingQueries from '../helpers/bookingQueries';
-// import Booking from '../models/booking';
+import Booking from '../models/booking';
 import db from '../db/connect';
 
 const {
-  checkUser, getTripsQuery, checkBookingQuery, updateTripQuery, bookingQuery, getBookingQuery, deleteBookingQuery, updateTripWithDeletedBookingQuery, deletedBookingQuery, checkTrip, checkSeats, checkSeatsOnTrip, updateSeatsOnTrip, updateSeatsOnBooking,
+  checkUserQuery,
+  getTripsQuery,
+  updateTripQuery,
+  bookingQuery,
+  checkBookingQuery,
+  getBookingQuery,
+  deleteBookingQuery,
+  updateTripWithDeletedBookingQuery,
+  deletedBookingQuery,
+  checkTrip,
+  checkSeats,
+  checkSeatsOnTrip,
+  updateSeatsOnTrip,
+  updateSeatsOnBooking,
 } = bookingQueries;
 
 
@@ -21,7 +34,7 @@ class BookingController {
     const bookingData = [userId, tripId];
 
 
-    db.query(checkUser)
+    db.query(checkUserQuery)
       .then((result) => {
         const foundUser = result.rows.filter(user => user.id === parseInt(userId, 10));
         if (foundUser.length < 1) {
@@ -78,7 +91,7 @@ class BookingController {
                   .then((result3) => {
                     const tripUpdate = result3.rows[0];
                     const seatNo = tripUpdate.booked_seats[tripUpdate.booked_seats.length - 1];
-                    console.log(seatNo);
+                    console.log('seat no', seatNo);
 
                     const moreBookingData = [foundTrip.bus_id, foundTrip.origin, foundTrip.destination, tripUpdate.trip_date, seatNo];
                     const completeBookingData = [...bookingData, ...moreBookingData];
@@ -114,7 +127,6 @@ class BookingController {
       })
       .catch(err => console.log(err));
   }
-
 
   static getBookings(req, res) {
     const { token, userId, isAdmin } = req.body;
@@ -218,7 +230,7 @@ class BookingController {
     const { token, userId, isAdmin } = req.body;
     const { bookingId } = req.params;
 
-    const { rows } = await db.query(checkTrip, [bookingId, 1]);
+    const { rows } = await db.query(checkTrip, [bookingId, userId]);
 
     if (rows.length) {
       console.log('bookingId ->', bookingId);
@@ -243,6 +255,7 @@ class BookingController {
           tripId: seats.rows[0].id,
           yourSeatNumber: oldSeatNumber,
           freeSeats,
+          bookedSeats,
           availableSeats,
         });
       }
@@ -292,7 +305,7 @@ class BookingController {
         // console.log(freeSeats, bookedSeats);
         const updateTrip = await db.query(updateSeatsOnTrip, [bookedSeats.length, freeSeats, bookedSeats, tripId]);
 
-        console.log(updateTrip.rows);
+        // console.log(updateTrip.rows);
 
         const seatChanged = await db.query(updateSeatsOnBooking, [newSeatNumber, bookingId]);
         if (seatChanged) {
@@ -305,7 +318,7 @@ class BookingController {
       } else {
         res.status(404).json({
           status: 404,
-          error: 'Please reconfirm ew seat number, the seat may have just been taken!',
+          error: 'Please reconfirm new seat number, the seat may have just been taken!',
         });
       }
     }
@@ -314,3 +327,153 @@ class BookingController {
 
 
 module.exports = BookingController;
+
+
+// static createBooking(req, res) {
+//     const {
+//       token, userId, isAdmin, tripId,
+//     } = req.body;
+
+//     // const newBooking = new Booking(userId, tripId);
+//     const updateData = [tripId];
+//     const bookingData = [userId, tripId];
+
+
+//     db.query(checkUser)
+//       .then((result) => {
+//         const foundUser = result.rows.filter(user => user.id === parseInt(userId, 10));
+//         if (foundUser.length < 1) {
+//           res.status(404).json({
+//             status: 404,
+//             error: 'User not registered',
+//           });
+//           return;
+//         }
+
+//         db.query(getTripsQuery, [tripId])
+//           .then((result1) => {
+//             const foundTrip = result1.rows[0];
+
+//             if (!foundTrip) {
+//               res.status(404).json({
+//                 status: 404,
+//                 error: 'Trip is not available',
+//               });
+//               return;
+//             }
+
+//             if (foundTrip.status === 'cancelled') {
+//               res.status(404).json({
+//                 status: 404,
+//                 error: 'Trip has been cancelled',
+//               });
+//               return;
+//             }
+
+//             if (foundTrip.booking_status === foundTrip.capacity) {
+//               res.status(404).json({
+//                 status: 404,
+//                 error: 'Sorry please, No more empty seats- Trip is fully booked',
+//               });
+//               return;
+//             }
+
+
+//             db.query(checkBookingQuery, bookingData)
+//               .then((result2) => {
+//                 const tripBooked = result2.rows[0];
+
+
+//                 if (tripBooked) {
+//                   res.status(404).json({
+//                     status: 404,
+//                     error: 'You are booked on this trip already',
+//                   });
+//                   return;
+//                 }
+
+//                 db.query(updateTripQuery, updateData)
+//                   .then((result3) => {
+//                     const tripUpdate = result3.rows[0];
+//                     const seatNo = tripUpdate.booked_seats[tripUpdate.booked_seats.length - 1];
+//                     console.log(seatNo);
+
+//                     const moreBookingData = [foundTrip.bus_id, foundTrip.origin, foundTrip.destination, tripUpdate.trip_date, seatNo];
+//                     const completeBookingData = [...bookingData, ...moreBookingData];
+
+//                     db.query(bookingQuery, completeBookingData)
+//                       .then((result4) => {
+//                         const booking = result4.rows[0];
+
+//                         const data = {
+//                           booking_id: booking.id,
+//                           trip_id: booking.trip_id,
+//                           user_id: booking.user_id,
+//                           bus_id: booking.bus_id,
+//                           origin: booking.origin,
+//                           destination: booking.destination,
+//                           trip_date: tripUpdate.trip_date,
+//                           seat_number: tripUpdate.booking_status,
+//                           message: 'Your trip has been booked',
+//                         };
+
+//                         res.status(201).json({
+//                           status: 201,
+//                           data,
+//                         });
+//                       })
+//                       .catch(err => console.log(err));
+//                   })
+//                   .catch(err => console.log(err));
+//               })
+//               .catch(err => console.log(err));
+//           })
+//           .catch(err => console.log(err));
+//       })
+//       .catch(err => console.log(err));
+// }
+
+// ///////////////////////////////////////////
+// const {
+//   token, userId, isAdmin, tripId,
+// } = req.body;
+
+// const newBooking = new Booking(userId, tripId);
+// const updateData = [tripId];
+// const bookingData = [userId, tripId];
+
+// newBooking.userCheck(userId)
+//   .then((foundUser) => {
+//     if (foundUser.length < 1) {
+//       newBooking.notRegistered(res);
+//     } else {
+//       console.log('foundUser', foundUser);
+
+//       newBooking.checkTrip(tripId, res)
+//         .then((foundTrip) => {
+//           newBooking.tripResponse(foundTrip, res);
+//           // console.log(foundTrip);
+
+//           newBooking.checkBooking(res)
+//             .then((booked) => {
+//               console.log(booked);
+//               if (booked.length > 0) {
+//                 newBooking.alreadyBooked(res);
+//                 return;
+//               }
+//               newBooking.updateTrip()
+//                 .then((tripUpdate) => {
+//                   console.log(tripUpdate);
+//                   const seatNo = tripUpdate.booked_seats[tripUpdate.booked_seats.length - 1];
+//                   console.log(seatNo);
+//                   const moreBookingData = [foundTrip.bus_id, foundTrip.origin, foundTrip.destination, tripUpdate.trip_date, seatNo];
+//                   const completeBookingData = [...bookingData, ...moreBookingData];
+//                   newBooking.makeBooking(tripUpdate, completeBookingData, res)
+//                     .then((tripBooked) => {
+//                       console.log(tripBooked);
+//                     });
+//                 });
+//             });
+//         });
+//     }
+//   });

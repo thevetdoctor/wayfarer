@@ -1,14 +1,15 @@
 /* eslint-disable no-console */
-import userQueries from '../helpers/userQueries';
 import db from '../db/connect';
-import { getHash, getToken, getCompared } from '../helpers/hashToken';
+import User from '../models/user';
+import { getHash } from '../helpers/hashToken';
 
-const { createUserQuery, findUserQuery } = userQueries;
+
+const getUserQuery = 'SELECT * FROM users ORDER BY id DESC';
 
 
 class UserController {
-  // static method to create a new user
-
+//
+  // 1. static method to create a new user
   static createUser(req, res) {
     const {
       email,
@@ -17,93 +18,84 @@ class UserController {
       password,
     } = req.body;
 
-    const user = [email, firstName, lastName];
 
-    // check if the user exists in the records
-    db.query(findUserQuery, [email])
-      .then((result1) => {
-        if (result1.rows[0]) {
+    const user = new User(email, firstName, lastName);
+
+    user.find(user.email)
+      .then((found) => {
+        // console.log(found);
+        if (found) {
           res.status(400).json({
             status: 400,
             error: 'Email already exist',
           });
-          return;
+          // return;
+        } else {
+          console.log('New email!');
+
+          // Hash the password with bcrypt
+          const hash = getHash(password);
+
+          user.details = [user.email, user.firstName, user.lastName, hash];
+
+          user.create(user.details, res);
         }
-
-        // Hash the password with bcrypt
-        const hash = getHash(password);
-
-        // create new user and store credentials in the records
-        db.query(createUserQuery, [...user, hash])
-          .then((result2) => {
-            const newUser = result2.rows[0];
-
-            // remove the associated password before creating a user token
-            delete newUser.password;
-
-            // get token with user credentials
-            const token = getToken(newUser);
-            const userDetails = { user_id: newUser.id, is_admin: newUser.is_admin, token };
-
-            // declare status code for successful response
-            res.status(201).json({
-              status: 201,
-              data: userDetails,
-            });
-          })
-          .catch((err) => {
-            console.log(err);
-            res.status(400).json({
-              status: 400,
-              err,
-            });
-          });
-      })
-      .catch((err) => {
-        res.status(400).json({
-          status: 400,
-          err,
-        });
       });
   }
 
 
+  // 2. sign in a registered user
   static signIn(req, res) {
     const {
       email, password,
     } = req.body;
 
-    db.query(findUserQuery, [email])
-      .then((result1) => {
-        const loggedUser = result1.rows[0];
+    const user = new User(email, '', '', password);
 
-        if (loggedUser) {
-          const compared = getCompared(password, loggedUser.password);
-
-          if (compared) {
-            delete loggedUser.password;
-            const token = getToken(loggedUser);
-            const loggedDetails = { user_id: loggedUser.id, is_admin: loggedUser.is_admin, token };
-
-            res.status(200).json({
-              status: 200,
-              data: loggedDetails,
-            });
-          } else {
-            res.status(400).json({
-              status: 400,
-              error: 'Password is invalid',
-            });
-          }
-        } else {
+    user.find(user.email)
+      .then((found) => {
+        if (!found) {
           res.status(400).json({
             status: 400,
             error: 'Email is invalid',
           });
+          return;
         }
-        // db.end();
+        console.log('Email found');
+        // console.log(found);
+        // console.log(user.password);
+        user.confirmPass(found, user.password, res);
+      });
+  }
+
+
+  static getUsers(req, res) {
+    db.query(getUserQuery)
+      .then((result) => {
+        if (result.rows.length < 1) {
+          res.status(404).json({
+            status: 404,
+            message: 'No user on record',
+          });
+          return;
+        }
+
+        const users = result.rows.map(user => (
+          {
+            id: user.id,
+            name: `${user.first_name} ${user.last_name}`,
+            email: user.email,
+            is_admin: user.is_admin,
+          }));
+
+        res.status(200).json({
+          status: 200,
+          data: users,
+        });
       })
       .catch((err) => {
+        console.log(err);
+
         res.status(400).json({
           status: 400,
           err,

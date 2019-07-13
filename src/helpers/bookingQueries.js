@@ -1,7 +1,7 @@
 module.exports = {
 
   //   booking queries
-  checkUser: 'SELECT id FROM users',
+  checkUserQuery: 'SELECT id FROM users',
 
   getTripsQuery: `SELECT * FROM trips INNER JOIN buses
                   ON trips.bus_id = buses.id
