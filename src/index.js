@@ -35,7 +35,7 @@ routeHandler(app);
 
 
 // Declare root path
-// console.log(__dirname);
+console.log(__dirname);
 app.get('/api/v1', (req, res) => {
   res.sendFile(path.join(__dirname.replace('src', ''), '/index.html'));
 });
