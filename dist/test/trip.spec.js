@@ -40,7 +40,7 @@ before(function (done) {
     var token = res.body.data.token; // console.log(res.body.data);
 
     adminToken = token;
-    describe('Testing Trips', function () {
+    describe('Testing Trips Endpoints', function () {
       it('Trip Controller should exist', function () {
         _trip["default"].should.exist;
       });
@@ -105,7 +105,7 @@ before(function (done) {
         _trip["default"].getTrips.should.exist;
       });
       it('Get Trips method (GET) should retrieve all available trips on record', function (done) {
-        _chai["default"].request(_index["default"]).get('/api/v1/trips').end(function (err, res) {
+        _chai["default"].request(_index["default"]).get('/api/v1/trips').set('Authorization', "Bearer ".concat(adminToken)).end(function (err, res) {
           res.should.have.status(200);
           res.should.be.json;
           res.body.should.be.a('object');

@@ -1,11 +1,12 @@
-const express = require('express');
-const BusController = require('../controllers/bus');
-// const auth = require('../auth');
+import express from 'express';
+import BusController from '../controllers/bus';
+import auth from '../auth';
+import adminAuth from '../auth/adminAuth';
 
 const router = express.Router();
 
 
-router.get('/', BusController.getBuses);
+router.get('/', auth, adminAuth, BusController.getBuses);
 
 
-module.exports = router;
+export default router;

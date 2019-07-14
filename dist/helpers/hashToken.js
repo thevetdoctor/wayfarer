@@ -1,29 +1,37 @@
 "use strict";
 
-var jwt = require('jsonwebtoken');
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
 
-var bcrypt = require('bcrypt');
+var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 
-var codes = require('../auth/codes');
+var _bcrypt = _interopRequireDefault(require("bcrypt"));
+
+var _codes = _interopRequireDefault(require("../auth/codes"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var getHash = function getHash(password) {
-  return bcrypt.hashSync(password, 10);
+  return _bcrypt["default"].hashSync(password, 10);
 };
 
 var getToken = function getToken(user) {
-  return jwt.sign({
+  return _jsonwebtoken["default"].sign({
     user: user
-  }, codes.secretKey, {
+  }, _codes["default"].secretKey, {
     expiresIn: '2h'
   });
 };
 
 var getCompared = function getCompared(password, hashed) {
-  return bcrypt.compareSync(password, hashed);
+  return _bcrypt["default"].compareSync(password, hashed);
 };
 
-module.exports = {
+var _default = {
   getHash: getHash,
   getToken: getToken,
   getCompared: getCompared
 };
+exports["default"] = _default;

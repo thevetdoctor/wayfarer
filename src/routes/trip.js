@@ -1,17 +1,18 @@
-const express = require('express');
-const TripController = require('../controllers/trip');
-// const auth = require('../auth');
+import express from 'express';
+import TripController from '../controllers/trip';
+import auth from '../auth';
+import adminAuth from '../auth/adminAuth';
 
 const router = express.Router();
 
 
-router.post('/', TripController.createTrip);
+router.post('/', auth, adminAuth, TripController.createTrip);
 
-router.get('/', TripController.getTrips);
+router.get('/', auth, TripController.getTrips);
 
-router.patch('/:tripId', TripController.cancelTrip);
+router.patch('/:trip_id', auth, adminAuth, TripController.cancelTrip);
 
-router.get('/:search', TripController.filterTrip);
+router.get('/:search', auth, TripController.filterTrip);
 
 
-module.exports = router;
+export default router;

@@ -1,8 +1,15 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _regeneratorRuntime = _interopRequireDefault(require("regenerator-runtime"));
+
 var _connect = _interopRequireDefault(require("../db/connect"));
 
-var _bookingQueries = _interopRequireDefault(require("../helpers/bookingQueries"));
+var _bookingQueries = _interopRequireDefault(require("../helpers/queries/bookingQueries"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -53,12 +60,12 @@ function () {
     value: function () {
       var _userCheck = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee(userId) {
+      _regeneratorRuntime["default"].mark(function _callee(userId) {
         var _this = this;
 
         var _ref, rows, foundUser;
 
-        return regeneratorRuntime.wrap(function _callee$(_context) {
+        return _regeneratorRuntime["default"].wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
@@ -92,10 +99,10 @@ function () {
     value: function () {
       var _checkTrip = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee2(tripId, res) {
+      _regeneratorRuntime["default"].mark(function _callee2(tripId, res) {
         var _ref2, rows, foundTrip;
 
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        return _regeneratorRuntime["default"].wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
@@ -127,10 +134,10 @@ function () {
     value: function () {
       var _checkBooking = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee3(res) {
+      _regeneratorRuntime["default"].mark(function _callee3(res) {
         var _ref3, rows;
 
-        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+        return _regeneratorRuntime["default"].wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
@@ -161,10 +168,10 @@ function () {
     value: function () {
       var _updateTrip = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee4() {
+      _regeneratorRuntime["default"].mark(function _callee4() {
         var _db$query, rows;
 
-        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+        return _regeneratorRuntime["default"].wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
@@ -248,10 +255,10 @@ function () {
     value: function () {
       var _makeBooking = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee5(tripUpdate, completeBookingData, res) {
+      _regeneratorRuntime["default"].mark(function _callee5(tripUpdate, completeBookingData, res) {
         var _ref4, rows, booking, data;
 
-        return regeneratorRuntime.wrap(function _callee5$(_context5) {
+        return _regeneratorRuntime["default"].wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
@@ -297,4 +304,5 @@ function () {
   return Booking;
 }();
 
-module.exports = Booking;
+var _default = Booking;
+exports["default"] = _default;

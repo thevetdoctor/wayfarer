@@ -1,6 +1,6 @@
 "use strict";
 
-var _tripQueries = _interopRequireDefault(require("../helpers/tripQueries"));
+var _tripQueries = _interopRequireDefault(require("../helpers/queries/tripQueries"));
 
 var _trip = _interopRequireDefault(require("../models/trip"));
 

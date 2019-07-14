@@ -1,8 +1,15 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _regeneratorRuntime = _interopRequireDefault(require("regenerator-runtime"));
+
 var _connect = _interopRequireDefault(require("../db/connect"));
 
-var _tripQueries = _interopRequireDefault(require("../helpers/tripQueries"));
+var _tripQueries = _interopRequireDefault(require("../helpers/queries/tripQueries"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -44,10 +51,10 @@ function () {
     value: function () {
       var _findBus = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee(busId) {
+      _regeneratorRuntime["default"].mark(function _callee(busId) {
         var _ref, rows;
 
-        return regeneratorRuntime.wrap(function _callee$(_context) {
+        return _regeneratorRuntime["default"].wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
@@ -87,10 +94,10 @@ function () {
     value: function () {
       var _create = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee2(details, res) {
+      _regeneratorRuntime["default"].mark(function _callee2(details, res) {
         var _ref2, rows;
 
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        return _regeneratorRuntime["default"].wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
@@ -125,10 +132,10 @@ function () {
     value: function () {
       var _getAll = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee3() {
+      _regeneratorRuntime["default"].mark(function _callee3() {
         var _ref3, rows;
 
-        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+        return _regeneratorRuntime["default"].wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
@@ -182,10 +189,10 @@ function () {
     value: function () {
       var _checkCancelled = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee4(tripId, res) {
+      _regeneratorRuntime["default"].mark(function _callee4(tripId, res) {
         var checkedTrip, _ref4, rows;
 
-        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+        return _regeneratorRuntime["default"].wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
@@ -264,7 +271,7 @@ function () {
     value: function () {
       var _filter = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee5() {
+      _regeneratorRuntime["default"].mark(function _callee5() {
         var origin,
             res,
             _ref5,
@@ -272,7 +279,7 @@ function () {
             from,
             _args5 = arguments;
 
-        return regeneratorRuntime.wrap(function _callee5$(_context5) {
+        return _regeneratorRuntime["default"].wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
@@ -319,4 +326,5 @@ function () {
   return Trip;
 }();
 
-module.exports = Trip;
+var _default = Trip;
+exports["default"] = _default;

@@ -1,10 +1,22 @@
 "use strict";
 
-var express = require('express');
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
 
-var BusController = require('../controllers/bus'); // const auth = require('../auth');
+var _express = _interopRequireDefault(require("express"));
 
+var _bus = _interopRequireDefault(require("../controllers/bus"));
 
-var router = express.Router();
-router.get('/', BusController.getBuses);
-module.exports = router;
+var _auth = _interopRequireDefault(require("../auth"));
+
+var _adminAuth = _interopRequireDefault(require("../auth/adminAuth"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var router = _express["default"].Router();
+
+router.get('/', _auth["default"], _adminAuth["default"], _bus["default"].getBuses);
+var _default = router;
+exports["default"] = _default;

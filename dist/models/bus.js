@@ -1,8 +1,15 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _regeneratorRuntime = _interopRequireDefault(require("regenerator-runtime"));
+
 var _connect = _interopRequireDefault(require("../db/connect"));
 
-var _busQueries = _interopRequireDefault(require("../helpers/busQueries"));
+var _busQueries = _interopRequireDefault(require("../helpers/queries/busQueries"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -37,10 +44,10 @@ function () {
     value: function () {
       var _getAll = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee() {
+      _regeneratorRuntime["default"].mark(function _callee() {
         var _ref, rows;
 
-        return regeneratorRuntime.wrap(function _callee$(_context) {
+        return _regeneratorRuntime["default"].wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
@@ -89,4 +96,5 @@ function () {
   return Bus;
 }();
 
-module.exports = Bus;
+var _default = Bus;
+exports["default"] = _default;

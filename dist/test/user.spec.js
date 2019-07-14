@@ -22,7 +22,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 _chai["default"].use(_chaiHttp["default"]);
 
 (0, _chai.should)();
-describe('Testing Users', function () {
+describe('Testing Users Endpoints', function () {
   it('User Controller should exist', function () {
     _user["default"].should.exist;
   });

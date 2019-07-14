@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+/* eslint-disable camelcase */
 import db from '../db/connect';
 import User from '../models/user';
 import { getHash } from '../helpers/hashToken';
@@ -6,20 +7,19 @@ import { getHash } from '../helpers/hashToken';
 
 const getUserQuery = 'SELECT * FROM users ORDER BY id DESC';
 
-
 class UserController {
 //
   // 1. static method to create a new user
   static createUser(req, res) {
     const {
       email,
-      firstName,
-      lastName,
+      first_name,
+      last_name,
       password,
     } = req.body;
 
 
-    const user = new User(email, firstName, lastName);
+    const user = new User(email, first_name, last_name);
 
     user.find(user.email)
       .then((found) => {
@@ -36,7 +36,7 @@ class UserController {
           // Hash the password with bcrypt
           const hash = getHash(password);
 
-          user.details = [user.email, user.firstName, user.lastName, hash];
+          user.details = [user.email, user.first_name, user.last_name, hash];
 
           user.create(user.details, res);
         }

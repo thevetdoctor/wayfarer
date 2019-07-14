@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
+/* eslint-disable camelcase */
+import regeneratorRuntime from 'regenerator-runtime';
 import db from '../db/connect';
-import busQueries from '../helpers/busQueries';
+import busQueries from '../helpers/queries/busQueries';
 
 
 const {
@@ -9,9 +11,9 @@ const {
 } = busQueries;
 
 class Bus {
-  constructor(numberPlate, manufacturer, model, year, capacity) {
+  constructor(number_plate, manufacturer, model, year, capacity) {
     this.id = null;
-    this.numberPlate = numberPlate;
+    this.number_plate = number_plate;
     this.manufacturer = manufacturer;
     this.model = model;
     this.year = year;
@@ -30,7 +32,7 @@ class Bus {
     const buses = rows.map(item => (
       {
         bus_id: item.id,
-        numberPlate: item.numberPlate,
+        number_plate: item.number_plate,
         manufacturer: item.manufacturer,
         model: item.model,
         year: item.year,
@@ -45,4 +47,4 @@ class Bus {
 }
 
 
-module.exports = Bus;
+export default Bus;

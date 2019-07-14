@@ -1,8 +1,9 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
+/* eslint-disable camelcase */
 // import regeneratorRuntime from 'regenerator-runtime';
-import tripQueries from '../helpers/tripQueries';
+import tripQueries from '../helpers/queries/tripQueries';
 import Trip from '../models/trip';
 // import db from '../db/connect';
 
@@ -16,25 +17,26 @@ const {
 class TripController {
   // 1. create a new trip
   static createTrip(req, res) {
+    // const { token, user_id, is_admin } = req.body;
     const {
-      busId, origin, destination, fare,
+      bus_id, origin, destination, fare,
     } = req.body;
 
-    const trip = new Trip(busId, origin, destination, fare);
+    const trip = new Trip(bus_id, origin, destination, fare);
 
-    trip.findBus(trip.busId, res)
+    trip.findBus(trip.bus_id, res)
       .then((bus) => {
         if (!bus.length) {
           res.status(400).json({
             status: 400,
-            error: `Bus with ID ${trip.busId} not registered`,
+            error: `Bus with ID ${trip.bus_id} not registered`,
           });
         } else {
           const tripActive = bus.filter(eachtrip => eachtrip.status === 'active');
           if (tripActive.length) {
             return trip.alreadyAssigned(tripActive, res);
           }
-          trip.details = [trip.busId, trip.origin, trip.destination, trip.fare];
+          trip.details = [trip.bus_id, trip.origin, trip.destination, trip.fare];
           trip.create(trip.details, res);
         }
       });
@@ -60,16 +62,16 @@ class TripController {
 
   // 3. cancel an active trip
   static cancelTrip(req, res) {
-    const { token, userId, isAdmin } = req.body;
-    const { tripId } = req.params;
+    const { token, user_id, is_admin } = req.body;
+    const { trip_id } = req.params;
 
-    Trip.checkCancelled(tripId, res);
+    Trip.checkCancelled(trip_id, res);
   }
 
 
   // 4. filter trips based on origin & destination
   static async filterTrip(req, res) {
-    const { token, userId, isAdmin } = req.body;
+    const { token, user_id, is_admin } = req.body;
     const { search } = req.params;
     const { origin, destination } = req.query;
 
