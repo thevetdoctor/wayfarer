@@ -10,7 +10,7 @@ import UserController from '../controllers/user';
 chai.use(chaiHttp);
 should();
 
-describe('Testing Users', () => {
+describe('Testing Users Endpoints', () => {
   it('User Controller should exist', () => {
     UserController.should.exist;
   });

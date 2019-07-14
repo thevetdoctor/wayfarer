@@ -1,13 +1,25 @@
 "use strict";
 
-var express = require('express');
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
 
-var TripController = require('../controllers/trip'); // const auth = require('../auth');
+var _express = _interopRequireDefault(require("express"));
 
+var _trip = _interopRequireDefault(require("../controllers/trip"));
 
-var router = express.Router();
-router.post('/', TripController.createTrip);
-router.get('/', TripController.getTrips);
-router.patch('/:tripId', TripController.cancelTrip);
-router.get('/:search', TripController.filterTrip);
-module.exports = router;
+var _auth = _interopRequireDefault(require("../auth"));
+
+var _adminAuth = _interopRequireDefault(require("../auth/adminAuth"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var router = _express["default"].Router();
+
+router.post('/', _auth["default"], _adminAuth["default"], _trip["default"].createTrip);
+router.get('/', _auth["default"], _trip["default"].getTrips);
+router.patch('/:tripId', _auth["default"], _adminAuth["default"], _trip["default"].cancelTrip);
+router.get('/:search', _auth["default"], _trip["default"].filterTrip);
+var _default = router;
+exports["default"] = _default;

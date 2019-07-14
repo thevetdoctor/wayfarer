@@ -1,14 +1,26 @@
 "use strict";
 
-var express = require('express');
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
 
-var BookingController = require('../controllers/booking'); // const auth = require('../auth');
+var _express = _interopRequireDefault(require("express"));
 
+var _booking = _interopRequireDefault(require("../controllers/booking"));
 
-var router = express.Router();
-router.post('/', BookingController.createBooking);
-router.get('/', BookingController.getBookings);
-router["delete"]('/:bookingId', BookingController.deleteBooking);
-router.get('/swap/:bookingId', BookingController.checkAvailableSeats);
-router.patch('/:bookingId', BookingController.changeSeat);
-module.exports = router;
+var _auth = _interopRequireDefault(require("../auth"));
+
+var _ownerAuth = _interopRequireDefault(require("../auth/ownerAuth"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var router = _express["default"].Router();
+
+router.post('/', _auth["default"], _booking["default"].createBooking);
+router.get('/', _auth["default"], _ownerAuth["default"], _booking["default"].getBookings);
+router["delete"]('/:bookingId', _auth["default"], _ownerAuth["default"], _booking["default"].deleteBooking);
+router.get('/swap/:bookingId', _auth["default"], _ownerAuth["default"], _booking["default"].checkAvailableSeats);
+router.patch('/:bookingId', _auth["default"], _ownerAuth["default"], _booking["default"].changeSeat);
+var _default = router;
+exports["default"] = _default;

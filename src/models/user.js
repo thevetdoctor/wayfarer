@@ -1,20 +1,22 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
+/* eslint-disable camelcase */
+import regeneratorRuntime from 'regenerator-runtime';
 import db from '../db/connect';
-import userQueries from '../helpers/userQueries';
+import userQueries from '../helpers/queries/userQueries';
 import { getToken, getCompared } from '../helpers/hashToken';
 
 const { createUserQuery, findUserQuery } = userQueries;
 
 
 class User {
-  constructor(email, firstName, lastName, password) {
+  constructor(email, first_name, last_name, password) {
     this.id = null;
     this.email = email;
-    this.firstName = firstName;
-    this.lastName = lastName;
+    this.first_name = first_name;
+    this.last_name = last_name;
     this.password = password;
-    this.isAdmin = null;
+    this.is_admin = null;
   }
 
 

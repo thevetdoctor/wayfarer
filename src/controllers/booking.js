@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 /* eslint-disable max-len */
-import bookingQueries from '../helpers/bookingQueries';
+/* eslint-disable camelcase */
+import bookingQueries from '../helpers/queries/bookingQueries';
 import Booking from '../models/booking';
 import db from '../db/connect';
 
@@ -12,9 +13,13 @@ const {
   bookingQuery,
   checkBookingQuery,
   getBookingQuery,
+  checkBookingsForUserQuery,
+  checkBookingForAdminQuery,
+  checkBookingForUserQuery,
   deleteBookingQuery,
   updateTripWithDeletedBookingQuery,
   deletedBookingQuery,
+  checkTripByAdmin,
   checkTrip,
   checkSeats,
   checkSeatsOnTrip,
@@ -25,18 +30,17 @@ const {
 
 class BookingController {
   static createBooking(req, res) {
-    const {
-      token, userId, isAdmin, tripId,
-    } = req.body;
+    const { trip_id } = req.body;
+    const user_id = req.token.id;
 
     // const newBooking = new Booking(userId, tripId);
-    const updateData = [tripId];
-    const bookingData = [userId, tripId];
+    const updateData = [trip_id];
+    const bookingData = [user_id, trip_id];
 
 
     db.query(checkUserQuery)
       .then((result) => {
-        const foundUser = result.rows.filter(user => user.id === parseInt(userId, 10));
+        const foundUser = result.rows.filter(user => user.id === parseInt(user_id, 10));
         if (foundUser.length < 1) {
           res.status(404).json({
             status: 404,
@@ -45,7 +49,7 @@ class BookingController {
           return;
         }
 
-        db.query(getTripsQuery, [tripId])
+        db.query(getTripsQuery, [trip_id])
           .then((result1) => {
             const foundTrip = result1.rows[0];
 
@@ -129,9 +133,18 @@ class BookingController {
   }
 
   static getBookings(req, res) {
-    const { token, userId, isAdmin } = req.body;
+    const { id, is_admin } = req.token;
+    const user_id = id;
 
-    db.query(getBookingQuery)
+    console.log(user_id, is_admin);
+    let query;
+    if (is_admin) {
+      query = [getBookingQuery];
+    } else {
+      query = [checkBookingsForUserQuery, [user_id]];
+    }
+
+    db.query(...query)
       .then((result) => {
         if (result.rows.length < 1) {
           res.status(404).json({
@@ -167,15 +180,22 @@ class BookingController {
 
 
   static deleteBooking(req, res) {
-    const { token, userId, isAdmin } = req.body;
-    const { bookingId } = req.params;
+    const { booking_id } = req.params;
+    const { id, is_admin } = req.token;
+    const user_id = id;
 
-    // console.log(bookingId, userId);
+    // console.log('user_id:', id, ', is_admin:', is_admin);
+    const checkData = [user_id, booking_id];
 
-    const checkData = [userId, bookingId];
+    let query;
+    if (is_admin) {
+      query = [checkBookingForAdminQuery, [booking_id]];
+    } else {
+      query = [checkBookingForUserQuery, checkData];
+    }
 
 
-    db.query(checkBookingQuery, checkData)
+    db.query(...query)
       .then((result1) => {
         if (result1.rows.length < 1) {
           res.status(404).json({
@@ -185,19 +205,9 @@ class BookingController {
           return;
         }
 
-        db.query(deleteBookingQuery, [bookingId])
+        db.query(deleteBookingQuery, [booking_id])
           .then((result2) => {
             const data = result2.rows[0];
-            // console.log(data);
-
-            if (data === undefined) {
-              res.status(404).json({
-                status: 404,
-                error: 'Booking found but not deleted',
-              });
-              return;
-            }
-            // console.log('tripId', result1.rows[0].trip_id);
             const updateTripWithDeletedBookingData = [1, result1.rows[0].trip_id];
 
             db.query(updateTripWithDeletedBookingQuery, updateTripWithDeletedBookingData)
@@ -227,14 +237,25 @@ class BookingController {
   }
 
   static async checkAvailableSeats(req, res) {
-    const { token, userId, isAdmin } = req.body;
-    const { bookingId } = req.params;
+    const { id, is_admin } = req.token;
+    const { booking_id } = req.params;
+    const user_id = parseInt(id, 10);
 
-    const { rows } = await db.query(checkTrip, [bookingId, userId]);
+
+    let query;
+    if (is_admin) {
+      query = [checkTripByAdmin, [booking_id]];
+    } else {
+      query = [checkTrip, [booking_id, user_id]];
+    }
+
+    const { rows } = await db.query(...query);
+    console.log(user_id, rows);
+
 
     if (rows.length) {
-      console.log('bookingId ->', bookingId);
-      console.log('tripId ->', rows[0].trip_id);
+      console.log('booking_id ->', booking_id);
+      console.log('trip_id ->', rows[0].trip_id);
 
       const seats = await db.query(checkSeats, [rows[0].trip_id]);
 
@@ -270,13 +291,13 @@ class BookingController {
 
 
   static async changeSeat(req, res) {
-    const { tripId } = req.body;
-    let { oldSeatNumber, newSeatNumber } = req.body;
-    const { bookingId } = req.params;
-    oldSeatNumber = parseInt(oldSeatNumber, 10);
-    newSeatNumber = parseInt(newSeatNumber, 10);
+    const { trip_id } = req.body;
+    let { old_seat_number, new_seat_number } = req.body;
+    const { booking_id } = req.params;
+    old_seat_number = parseInt(old_seat_number, 10);
+    new_seat_number = parseInt(new_seat_number, 10);
 
-    const { rows } = await db.query(checkSeatsOnTrip, [tripId]);
+    const { rows } = await db.query(checkSeatsOnTrip, [trip_id]);
 
     // console.log('old seat number', oldSeatNumber);
     // console.log('new seat number', newSeatNumber);
@@ -287,7 +308,7 @@ class BookingController {
       // console.log('free seats', freeSeats);
       // console.log('booked seats', bookedSeats);
 
-      if (!bookedSeats.filter(item => item === oldSeatNumber).length) {
+      if (!bookedSeats.filter(item => item === old_seat_number).length) {
         console.log('Your old seat number not found in booked seats!');
         res.status(404).json({
           status: 404,
@@ -295,24 +316,24 @@ class BookingController {
         });
         return;
       }
-      if (freeSeats.filter(item => item === newSeatNumber).length) {
-        freeSeats.splice(freeSeats.indexOf(newSeatNumber), 1, oldSeatNumber);
-        bookedSeats.splice(bookedSeats.indexOf(oldSeatNumber), 1, newSeatNumber);
+      if (freeSeats.filter(item => item === new_seat_number).length) {
+        freeSeats.splice(freeSeats.indexOf(new_seat_number), 1, old_seat_number);
+        bookedSeats.splice(bookedSeats.indexOf(old_seat_number), 1, new_seat_number);
 
         // console.log(oldSeatNumber, newSeatNumber);
         // console.log(freeSeats.filter(item => item === newSeatNumber));
         // console.log(freeSeats.filter(item => item === oldSeatNumber));
         // console.log(freeSeats, bookedSeats);
-        const updateTrip = await db.query(updateSeatsOnTrip, [bookedSeats.length, freeSeats, bookedSeats, tripId]);
+        const updateTrip = await db.query(updateSeatsOnTrip, [bookedSeats.length, freeSeats, bookedSeats, trip_id]);
 
         // console.log(updateTrip.rows);
 
-        const seatChanged = await db.query(updateSeatsOnBooking, [newSeatNumber, bookingId]);
+        const seatChanged = await db.query(updateSeatsOnBooking, [new_seat_number, booking_id]);
         if (seatChanged) {
           res.status(200).json({
             status: 200,
             data: rows[0],
-            message: `Your seat number has been changed from ${oldSeatNumber} to ${newSeatNumber}`,
+            message: `Your seat number has been changed from ${old_seat_number} to ${new_seat_number}`,
           });
         }
       } else {
@@ -327,153 +348,3 @@ class BookingController {
 
 
 module.exports = BookingController;
-
-
-// static createBooking(req, res) {
-//     const {
-//       token, userId, isAdmin, tripId,
-//     } = req.body;
-
-//     // const newBooking = new Booking(userId, tripId);
-//     const updateData = [tripId];
-//     const bookingData = [userId, tripId];
-
-
-//     db.query(checkUser)
-//       .then((result) => {
-//         const foundUser = result.rows.filter(user => user.id === parseInt(userId, 10));
-//         if (foundUser.length < 1) {
-//           res.status(404).json({
-//             status: 404,
-//             error: 'User not registered',
-//           });
-//           return;
-//         }
-
-//         db.query(getTripsQuery, [tripId])
-//           .then((result1) => {
-//             const foundTrip = result1.rows[0];
-
-//             if (!foundTrip) {
-//               res.status(404).json({
-//                 status: 404,
-//                 error: 'Trip is not available',
-//               });
-//               return;
-//             }
-
-//             if (foundTrip.status === 'cancelled') {
-//               res.status(404).json({
-//                 status: 404,
-//                 error: 'Trip has been cancelled',
-//               });
-//               return;
-//             }
-
-//             if (foundTrip.booking_status === foundTrip.capacity) {
-//               res.status(404).json({
-//                 status: 404,
-//                 error: 'Sorry please, No more empty seats- Trip is fully booked',
-//               });
-//               return;
-//             }
-
-
-//             db.query(checkBookingQuery, bookingData)
-//               .then((result2) => {
-//                 const tripBooked = result2.rows[0];
-
-
-//                 if (tripBooked) {
-//                   res.status(404).json({
-//                     status: 404,
-//                     error: 'You are booked on this trip already',
-//                   });
-//                   return;
-//                 }
-
-//                 db.query(updateTripQuery, updateData)
-//                   .then((result3) => {
-//                     const tripUpdate = result3.rows[0];
-//                     const seatNo = tripUpdate.booked_seats[tripUpdate.booked_seats.length - 1];
-//                     console.log(seatNo);
-
-//                     const moreBookingData = [foundTrip.bus_id, foundTrip.origin, foundTrip.destination, tripUpdate.trip_date, seatNo];
-//                     const completeBookingData = [...bookingData, ...moreBookingData];
-
-//                     db.query(bookingQuery, completeBookingData)
-//                       .then((result4) => {
-//                         const booking = result4.rows[0];
-
-//                         const data = {
-//                           booking_id: booking.id,
-//                           trip_id: booking.trip_id,
-//                           user_id: booking.user_id,
-//                           bus_id: booking.bus_id,
-//                           origin: booking.origin,
-//                           destination: booking.destination,
-//                           trip_date: tripUpdate.trip_date,
-//                           seat_number: tripUpdate.booking_status,
-//                           message: 'Your trip has been booked',
-//                         };
-
-//                         res.status(201).json({
-//                           status: 201,
-//                           data,
-//                         });
-//                       })
-//                       .catch(err => console.log(err));
-//                   })
-//                   .catch(err => console.log(err));
-//               })
-//               .catch(err => console.log(err));
-//           })
-//           .catch(err => console.log(err));
-//       })
-//       .catch(err => console.log(err));
-// }
-
-// ///////////////////////////////////////////
-// const {
-//   token, userId, isAdmin, tripId,
-// } = req.body;
-
-// const newBooking = new Booking(userId, tripId);
-// const updateData = [tripId];
-// const bookingData = [userId, tripId];
-
-// newBooking.userCheck(userId)
-//   .then((foundUser) => {
-//     if (foundUser.length < 1) {
-//       newBooking.notRegistered(res);
-//     } else {
-//       console.log('foundUser', foundUser);
-
-//       newBooking.checkTrip(tripId, res)
-//         .then((foundTrip) => {
-//           newBooking.tripResponse(foundTrip, res);
-//           // console.log(foundTrip);
-
-//           newBooking.checkBooking(res)
-//             .then((booked) => {
-//               console.log(booked);
-//               if (booked.length > 0) {
-//                 newBooking.alreadyBooked(res);
-//                 return;
-//               }
-//               newBooking.updateTrip()
-//                 .then((tripUpdate) => {
-//                   console.log(tripUpdate);
-//                   const seatNo = tripUpdate.booked_seats[tripUpdate.booked_seats.length - 1];
-//                   console.log(seatNo);
-//                   const moreBookingData = [foundTrip.bus_id, foundTrip.origin, foundTrip.destination, tripUpdate.trip_date, seatNo];
-//                   const completeBookingData = [...bookingData, ...moreBookingData];
-//                   newBooking.makeBooking(tripUpdate, completeBookingData, res)
-//                     .then((tripBooked) => {
-//                       console.log(tripBooked);
-//                     });
-//                 });
-//             });
-//         });
-//     }
-//   });

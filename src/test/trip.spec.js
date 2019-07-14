@@ -33,7 +33,7 @@ before((done) => {
       adminToken = token;
 
 
-      describe('Testing Trips', () => {
+      describe('Testing Trips Endpoints', () => {
         it('Trip Controller should exist', () => {
           TripController.should.exist;
         });
@@ -115,6 +115,7 @@ before((done) => {
         it('Get Trips method (GET) should retrieve all available trips on record', (done) => {
           chai.request(server)
             .get('/api/v1/trips')
+            .set('Authorization', `Bearer ${adminToken}`)
             .end((err, res) => {
               res.should.have.status(200);
               res.should.be.json;

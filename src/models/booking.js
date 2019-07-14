@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
+/* eslint-disable camelcase */
+import regeneratorRuntime from 'regenerator-runtime';
 import db from '../db/connect';
-import bookingQueries from '../helpers/bookingQueries';
+import bookingQueries from '../helpers/queries/bookingQueries';
 
 
 const {
@@ -23,22 +25,22 @@ const {
 
 
 class Booking {
-  constructor(userId, tripId) {
+  constructor(user_id, trip_id) {
     this.id = null;
-    this.tripId = tripId;
-    this.userId = userId;
-    this.busId = null;
+    this.trip_id = trip_id;
+    this.user_id = user_id;
+    this.bus_id = null;
     this.origin = null;
     this.destination = null;
-    this.tripDate = null;
-    this.seatNumber = null;
-    this.createdOn = null;
+    this.trip_date = null;
+    this.seat_number = null;
+    this.created_on = null;
   }
 
 
-  async userCheck(userId) {
+  async userCheck(user_id) {
     const { rows } = await db.query(checkUserQuery);
-    const foundUser = rows.filter(user => user.id === parseInt(this.userId, 10));
+    const foundUser = rows.filter(user => user.id === parseInt(this.user_id, 10));
     return foundUser;
   }
 
@@ -96,22 +98,22 @@ class Booking {
   }
 
 
-  async checkTrip(tripId, res) {
-    const { rows } = await db.query(getTripsQuery, [this.tripId]);
+  async checkTrip(trip_id, res) {
+    const { rows } = await db.query(getTripsQuery, [this.trip_id]);
     const foundTrip = rows[0];
     return foundTrip;
   }
 
 
   async checkBooking(res) {
-    const { rows } = await db.query(checkBookingQuery, [this.userId, this.tripId]);
+    const { rows } = await db.query(checkBookingQuery, [this.user_id, this.trip_id]);
     // const tripBooked = rows[0];
     return rows;
   }
 
 
   async updateTrip() {
-    const { rows } = db.query(updateTripQuery, [this.tripId]);
+    const { rows } = db.query(updateTripQuery, [this.trip_id]);
     return rows;
   }
 
@@ -140,4 +142,4 @@ class Booking {
 }
 
 
-module.exports = Booking;
+export default Booking;

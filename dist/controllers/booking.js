@@ -1,6 +1,6 @@
 "use strict";
 
-var _bookingQueries = _interopRequireDefault(require("../helpers/bookingQueries"));
+var _bookingQueries = _interopRequireDefault(require("../helpers/queries/bookingQueries"));
 
 var _booking = _interopRequireDefault(require("../models/booking"));
 
@@ -205,15 +205,14 @@ function () {
 
         _connect["default"].query(deleteBookingQuery, [bookingId]).then(function (result2) {
           var data = result2.rows[0]; // console.log(data);
-
-          if (data === undefined) {
-            res.status(404).json({
-              status: 404,
-              error: 'Booking found but not deleted'
-            });
-            return;
-          } // console.log('tripId', result1.rows[0].trip_id);
-
+          // if (data === undefined) {
+          //   res.status(404).json({
+          //     status: 404,
+          //     error: 'Booking found but not deleted',
+          //   });
+          //   return;
+          // }
+          // console.log('tripId', result1.rows[0].trip_id);
 
           var updateTripWithDeletedBookingData = [1, result1.rows[0].trip_id];
 

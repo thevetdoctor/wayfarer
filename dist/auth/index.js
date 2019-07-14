@@ -21,16 +21,14 @@ var auth = function auth(req, res, next) {
       }
 
       req.token = decoded.user;
-      console.log("User with email: '".concat(req.token.email, "' has ").concat(req.token.is_admin ? 'admin' : 'no admin', " access"));
-
-      if (!req.token.is_admin) {
-        console.log('Admin access only');
-        res.status(403).json({
-          status: 403,
-          error: 'Admin access only'
-        });
-        return;
-      }
+      console.log("User with email: '".concat(req.token.email, "' has ").concat(req.token.is_admin ? 'admin' : 'no admin', " access")); // if (!req.token.is_admin) {
+      //   console.log('Admin access only');
+      //   res.status(403).json({
+      //     status: 403,
+      //     error: 'Admin access only',
+      //   });
+      //   return;
+      // }
 
       next();
     });

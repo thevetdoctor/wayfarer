@@ -2,16 +2,16 @@ const { getHash } = require('../../helpers/hashToken');
 
 const usersQuery = `INSERT INTO users (
                 email, first_name, last_name, password, is_admin)
-                VALUES ('oba@gmail.com', 'oba', 'femi', '${getHash('pass1')}', true);
+                VALUES ('oba@gmail.com', 'oba', 'femi', '${getHash('obapass')}', true);
                INSERT INTO users (
                 email, first_name, last_name, password)
-                VALUES ('dami@gmail.com', 'dami', 'lola', '${getHash('pass2')}');
+                VALUES ('dami@gmail.com', 'dami', 'lola', '${getHash('damipass')}');
                INSERT INTO users (
                 email, first_name, last_name, password)
-                VALUES ('demi@gmail.com', 'demi', 'lade', '${getHash('pass3')}');
+                VALUES ('demi@gmail.com', 'demi', 'lade', '${getHash('demipass')}');
                INSERT INTO users (
                 email, first_name, last_name, password)
-                VALUES ('oye@gmail.com', 'oye', 'toke', '${getHash('pass4')}');`;
+                VALUES ('oye@gmail.com', 'oye', 'toke', '${getHash('oyepass')}');`;
 
 
 const busesQuery = `INSERT INTO buses (

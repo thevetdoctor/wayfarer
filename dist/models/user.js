@@ -1,8 +1,10 @@
 "use strict";
 
+var _regeneratorRuntime = _interopRequireDefault(require("regenerator-runtime"));
+
 var _connect = _interopRequireDefault(require("../db/connect"));
 
-var _userQueries = _interopRequireDefault(require("../helpers/userQueries"));
+var _userQueries = _interopRequireDefault(require("../helpers/queries/userQueries"));
 
 var _hashToken = require("../helpers/hashToken");
 
@@ -40,10 +42,10 @@ function () {
     value: function () {
       var _find = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee(email) {
+      _regeneratorRuntime["default"].mark(function _callee(email) {
         var _ref, rows;
 
-        return regeneratorRuntime.wrap(function _callee$(_context) {
+        return _regeneratorRuntime["default"].wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
@@ -74,10 +76,10 @@ function () {
     value: function () {
       var _create = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee2(details, res) {
+      _regeneratorRuntime["default"].mark(function _callee2(details, res) {
         var _ref2, rows, newUser, token, userDetails;
 
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        return _regeneratorRuntime["default"].wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:

@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
+/* eslint-disable camelcase */
+import regeneratorRuntime from 'regenerator-runtime';
 import db from '../db/connect';
-import tripQueries from '../helpers/tripQueries';
+import tripQueries from '../helpers/queries/tripQueries';
 
 
 const {
@@ -16,21 +18,21 @@ const {
 
 
 class Trip {
-  constructor(busId, origin, destination, fare) {
+  constructor(bus_id, origin, destination, fare) {
     this.id = null;
-    this.busId = busId;
+    this.bus_id = bus_id;
     this.origin = origin;
     this.destination = destination;
-    this.tripDate = null;
+    this.trip_date = null;
     this.fare = fare;
     this.status = null;
   }
 
 
-  async findBus(busId) {
+  async findBus(bus_id) {
     // const tripDetails = [busId, origin, destination, fare];
 
-    const { rows } = await db.query(findBusQuery, [this.busId]);
+    const { rows } = await db.query(findBusQuery, [this.bus_id]);
     // const busFound = rows[0];
     return rows;
   }
@@ -40,7 +42,7 @@ class Trip {
     // //
     return res.status(404).json({
       status: 404,
-      error: `Bus with ID ${this.busId} & PLATE-NUMBER ${bus[0].plate_number} is already assigned`,
+      error: `Bus with ID ${this.bus_id} & PLATE-NUMBER ${bus[0].plate_number} is already assigned`,
     });
   }
 
@@ -84,8 +86,8 @@ class Trip {
     });
   }
 
-  static async checkCancelled(tripId, res) {
-    const checkedTrip = await db.query(checkTripQuery, [tripId]);
+  static async checkCancelled(trip_id, res) {
+    const checkedTrip = await db.query(checkTripQuery, [trip_id]);
     console.log('checking', checkedTrip.rows.length);
     if (checkedTrip.rows.length < 1) {
       res.status(404).json({
@@ -101,7 +103,7 @@ class Trip {
       });
       return;
     }
-    const { rows } = await db.query(cancelTripQuery, ['cancelled', tripId]);
+    const { rows } = await db.query(cancelTripQuery, ['cancelled', trip_id]);
 
     console.log('updated', rows);
     if (!rows) {
@@ -139,4 +141,4 @@ class Trip {
 }
 
 
-module.exports = Trip;
+export default Trip;

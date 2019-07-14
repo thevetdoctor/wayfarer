@@ -1,19 +1,21 @@
-const express = require('express');
-const BookingController = require('../controllers/booking');
-// const auth = require('../auth');
+import express from 'express';
+import BookingController from '../controllers/booking';
+import auth from '../auth';
+import ownerAuth from '../auth/ownerAuth';
+
 
 const router = express.Router();
 
 
-router.post('/', BookingController.createBooking);
+router.post('/', auth, BookingController.createBooking);
 
-router.get('/', BookingController.getBookings);
+router.get('/', auth, ownerAuth, BookingController.getBookings);
 
-router.delete('/:bookingId', BookingController.deleteBooking);
+router.delete('/:booking_id', auth, ownerAuth, BookingController.deleteBooking);
 
-router.get('/swap/:bookingId', BookingController.checkAvailableSeats);
+router.get('/swap/:booking_id', auth, ownerAuth, BookingController.checkAvailableSeats);
 
-router.patch('/:bookingId', BookingController.changeSeat);
+router.patch('/:booking_id', auth, ownerAuth, BookingController.changeSeat);
 
 
-module.exports = router;
+export default router;
