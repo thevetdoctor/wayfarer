@@ -34,14 +34,14 @@ var createTripQuery = _tripQueries["default"].createTripQuery,
 var Trip =
 /*#__PURE__*/
 function () {
-  function Trip(busId, origin, destination, fare) {
+  function Trip(bus_id, origin, destination, fare) {
     _classCallCheck(this, Trip);
 
     this.id = null;
-    this.busId = busId;
+    this.bus_id = bus_id;
     this.origin = origin;
     this.destination = destination;
-    this.tripDate = null;
+    this.trip_date = null;
     this.fare = fare;
     this.status = null;
   }
@@ -51,7 +51,7 @@ function () {
     value: function () {
       var _findBus = _asyncToGenerator(
       /*#__PURE__*/
-      _regeneratorRuntime["default"].mark(function _callee(busId) {
+      _regeneratorRuntime["default"].mark(function _callee(bus_id) {
         var _ref, rows;
 
         return _regeneratorRuntime["default"].wrap(function _callee$(_context) {
@@ -59,7 +59,7 @@ function () {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return _connect["default"].query(findBusQuery, [this.busId]);
+                return _connect["default"].query(findBusQuery, [this.bus_id]);
 
               case 2:
                 _ref = _context.sent;
@@ -86,7 +86,7 @@ function () {
       // //
       return res.status(404).json({
         status: 404,
-        error: "Bus with ID ".concat(this.busId, " & PLATE-NUMBER ").concat(bus[0].plate_number, " is already assigned")
+        error: "Bus with ID ".concat(this.bus_id, " & PLATE-NUMBER ").concat(bus[0].plate_number, " is already assigned")
       });
     }
   }, {
@@ -189,7 +189,7 @@ function () {
     value: function () {
       var _checkCancelled = _asyncToGenerator(
       /*#__PURE__*/
-      _regeneratorRuntime["default"].mark(function _callee4(tripId, res) {
+      _regeneratorRuntime["default"].mark(function _callee4(trip_id, res) {
         var checkedTrip, _ref4, rows;
 
         return _regeneratorRuntime["default"].wrap(function _callee4$(_context4) {
@@ -197,7 +197,7 @@ function () {
             switch (_context4.prev = _context4.next) {
               case 0:
                 _context4.next = 2;
-                return _connect["default"].query(checkTripQuery, [tripId]);
+                return _connect["default"].query(checkTripQuery, [trip_id]);
 
               case 2:
                 checkedTrip = _context4.sent;
@@ -228,7 +228,7 @@ function () {
 
               case 10:
                 _context4.next = 12;
-                return _connect["default"].query(cancelTripQuery, ['cancelled', tripId]);
+                return _connect["default"].query(cancelTripQuery, ['cancelled', trip_id]);
 
               case 12:
                 _ref4 = _context4.sent;

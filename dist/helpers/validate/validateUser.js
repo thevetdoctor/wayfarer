@@ -13,6 +13,8 @@ exports["default"] = void 0;
 
 /* eslint-disable guard-for-in */
 
+/* eslint-disable camelcase */
+
 /* eslint-disable no-useless-escape */
 // import removeWhitespace from './removeWhitespace';
 var validateEmail = function validateEmail(email) {
@@ -32,12 +34,12 @@ var validateUser = {
   validateSignup: function validateSignup(req, res, next) {
     var _req$body = req.body,
         email = _req$body.email,
-        firstName = _req$body.firstName,
-        lastName = _req$body.lastName,
+        first_name = _req$body.first_name,
+        last_name = _req$body.last_name,
         password = _req$body.password;
     console.log('entered validation');
 
-    if (email === undefined) {
+    if (email === undefined || email === '') {
       res.status(400).json({
         status: 400,
         error: 'Email not supplied'
@@ -45,7 +47,7 @@ var validateUser = {
       return;
     }
 
-    if (firstName === undefined || firstName.trim() === '') {
+    if (first_name === undefined || first_name.trim() === '') {
       res.status(400).json({
         status: 400,
         error: 'Firstname not supplied'
@@ -53,7 +55,7 @@ var validateUser = {
       return;
     }
 
-    if (lastName === undefined || lastName.trim() === '') {
+    if (last_name === undefined || last_name.trim() === '') {
       res.status(400).json({
         status: 400,
         error: 'Lastname not supplied'
@@ -61,7 +63,7 @@ var validateUser = {
       return;
     }
 
-    if (password === undefined) {
+    if (password === undefined || password === '') {
       res.status(400).json({
         status: 400,
         error: 'Password not supplied'
@@ -85,7 +87,7 @@ var validateUser = {
       return;
     }
 
-    if (specialCharacters.test(firstName)) {
+    if (specialCharacters.test(first_name)) {
       res.status(400).json({
         status: 400,
         error: 'No special chacacters allowed'
@@ -93,7 +95,7 @@ var validateUser = {
       return;
     }
 
-    if (specialCharacters.test(lastName)) {
+    if (specialCharacters.test(last_name)) {
       res.status(400).json({
         status: 400,
         error: 'No special chacacters allowed'
@@ -144,7 +146,5 @@ var validateUser = {
     next();
   }
 };
-var _default = {
-  validateUser: validateUser
-};
+var _default = validateUser;
 exports["default"] = _default;

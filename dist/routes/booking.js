@@ -19,8 +19,8 @@ var router = _express["default"].Router();
 
 router.post('/', _auth["default"], _booking["default"].createBooking);
 router.get('/', _auth["default"], _ownerAuth["default"], _booking["default"].getBookings);
-router["delete"]('/:bookingId', _auth["default"], _ownerAuth["default"], _booking["default"].deleteBooking);
-router.get('/swap/:bookingId', _auth["default"], _ownerAuth["default"], _booking["default"].checkAvailableSeats);
-router.patch('/:bookingId', _auth["default"], _ownerAuth["default"], _booking["default"].changeSeat);
+router["delete"]('/:booking_id', _auth["default"], _ownerAuth["default"], _booking["default"].deleteBooking);
+router.get('/swap/:booking_id', _auth["default"], _ownerAuth["default"], _booking["default"].checkAvailableSeats);
+router.patch('/:booking_id', _auth["default"], _ownerAuth["default"], _booking["default"].changeSeat);
 var _default = router;
 exports["default"] = _default;

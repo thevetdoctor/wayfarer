@@ -32,11 +32,15 @@ var port = process.env.PORT || 8000; // Set body parser to make parameter accept
 app.use(_bodyParser["default"].json());
 app.use(_bodyParser["default"].urlencoded({
   extended: true
-})); // Link routeHandler
+})); // use swagger-Ui-express for your app documentation endpoint
+
+app.use('/api/v1/docs', _swaggerUiExpress["default"].serve, _swaggerUiExpress["default"].setup(_swagger["default"])); // copywright:
+// https://medium.com/the-andela-way/splitting-your-swagger-spec-into-multiple-files-in-a-node-project-2019575b0ced
+// Link routeHandler
 
 (0, _routes["default"])(app); // Declare root path
+// console.log(__dirname);
 
-console.log(__dirname);
 app.get('/api/v1', function (req, res) {
   res.sendFile(_path["default"].join(__dirname.replace('src', ''), '/index.html'));
 });
@@ -46,14 +50,11 @@ app.use(function (err, req, res, next) {
 }); // app.get('/*', (req, res) => {
 //     res.sendFile(path.join(__dirname, '/index.html'));
 // });
-// use swagger-Ui-express for your app documentation endpoint
-
-app.use('/api/v1/docs', _swaggerUiExpress["default"].serve, _swaggerUiExpress["default"].setup(_swagger["default"])); // copywright:
-// https://medium.com/the-andela-way/splitting-your-swagger-spec-into-multiple-files-in-a-node-project-2019575b0ced
 // Initialise Server
 
 app.listen(port, function () {
   console.log("Server started @ ".concat(port));
-});
+}); // process.exit();
+
 var _default = app;
 exports["default"] = _default;

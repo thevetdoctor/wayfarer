@@ -11,11 +11,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 
 var swaggerDefinition = {
   info: {
-    title: 'REST API for Wayfarer',
+    title: 'Wayfarer REST API',
     // Title of the documentation
     version: '1.0.0',
     // Version of the app
-    description: 'This is the REST API for Wayfarer' // short description of the app
+    description: 'Back-End Server API for Wayfarer Booking Server' // short description of the app
 
   },
   host: 'localhost:8000',

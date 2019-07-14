@@ -35,10 +35,10 @@ function () {
     value: function createUser(req, res) {
       var _req$body = req.body,
           email = _req$body.email,
-          firstName = _req$body.firstName,
-          lastName = _req$body.lastName,
+          first_name = _req$body.first_name,
+          last_name = _req$body.last_name,
           password = _req$body.password;
-      var user = new _user["default"](email, firstName, lastName);
+      var user = new _user["default"](email, first_name, last_name);
       user.find(user.email).then(function (found) {
         // console.log(found);
         if (found) {
@@ -50,7 +50,7 @@ function () {
           console.log('New email!'); // Hash the password with bcrypt
 
           var hash = (0, _hashToken.getHash)(password);
-          user.details = [user.email, user.firstName, user.lastName, hash];
+          user.details = [user.email, user.first_name, user.last_name, hash];
           user.create(user.details, res);
         }
       });

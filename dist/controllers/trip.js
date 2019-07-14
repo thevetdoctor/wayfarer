@@ -31,17 +31,18 @@ function () {
     key: "createTrip",
     // 1. create a new trip
     value: function createTrip(req, res) {
+      // const { token, user_id, is_admin } = req.body;
       var _req$body = req.body,
-          busId = _req$body.busId,
+          bus_id = _req$body.bus_id,
           origin = _req$body.origin,
           destination = _req$body.destination,
           fare = _req$body.fare;
-      var trip = new _trip["default"](busId, origin, destination, fare);
-      trip.findBus(trip.busId, res).then(function (bus) {
+      var trip = new _trip["default"](bus_id, origin, destination, fare);
+      trip.findBus(trip.bus_id, res).then(function (bus) {
         if (!bus.length) {
           res.status(400).json({
             status: 400,
-            error: "Bus with ID ".concat(trip.busId, " not registered")
+            error: "Bus with ID ".concat(trip.bus_id, " not registered")
           });
         } else {
           var tripActive = bus.filter(function (eachtrip) {
@@ -52,7 +53,7 @@ function () {
             return trip.alreadyAssigned(tripActive, res);
           }
 
-          trip.details = [trip.busId, trip.origin, trip.destination, trip.fare];
+          trip.details = [trip.bus_id, trip.origin, trip.destination, trip.fare];
           trip.create(trip.details, res);
         }
       });
@@ -79,11 +80,11 @@ function () {
     value: function cancelTrip(req, res) {
       var _req$body2 = req.body,
           token = _req$body2.token,
-          userId = _req$body2.userId,
-          isAdmin = _req$body2.isAdmin;
-      var tripId = req.params.tripId;
+          user_id = _req$body2.user_id,
+          is_admin = _req$body2.is_admin;
+      var trip_id = req.params.trip_id;
 
-      _trip["default"].checkCancelled(tripId, res);
+      _trip["default"].checkCancelled(trip_id, res);
     } // 4. filter trips based on origin & destination
 
   }, {
@@ -92,13 +93,13 @@ function () {
       var _filterTrip = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee(req, res) {
-        var _req$body3, token, userId, isAdmin, search, _req$query, origin, destination;
+        var _req$body3, token, user_id, is_admin, search, _req$query, origin, destination;
 
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _req$body3 = req.body, token = _req$body3.token, userId = _req$body3.userId, isAdmin = _req$body3.isAdmin;
+                _req$body3 = req.body, token = _req$body3.token, user_id = _req$body3.user_id, is_admin = _req$body3.is_admin;
                 search = req.params.search;
                 _req$query = req.query, origin = _req$query.origin, destination = _req$query.destination; // console.log(req.params);
                 // console.log(req.query);

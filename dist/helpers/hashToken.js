@@ -1,37 +1,43 @@
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
+/* eslint-disable no-console */
+// import regeneratorRuntime from 'regenerator-runtime';
+var jwt = require('jsonwebtoken');
 
-var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
+var bcrypt = require('bcrypt');
 
-var _bcrypt = _interopRequireDefault(require("bcrypt"));
-
-var _codes = _interopRequireDefault(require("../auth/codes"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+var codes = require('../auth/codes');
 
 var getHash = function getHash(password) {
-  return _bcrypt["default"].hashSync(password, 10);
+  return bcrypt.hashSync(password, 10);
 };
 
 var getToken = function getToken(user) {
-  return _jsonwebtoken["default"].sign({
+  return jwt.sign({
     user: user
-  }, _codes["default"].secretKey, {
+  }, codes.secretKey, {
     expiresIn: '2h'
   });
 };
 
 var getCompared = function getCompared(password, hashed) {
-  return _bcrypt["default"].compareSync(password, hashed);
+  return bcrypt.compareSync(password, hashed);
 };
 
-var _default = {
+module.exports = {
   getHash: getHash,
   getToken: getToken,
   getCompared: getCompared
-};
-exports["default"] = _default;
+}; // import jwt from 'jsonwebtoken';
+// import bcrypt from 'bcrypt';
+// import codes from '../auth/codes';
+// const getHasg = async (password) => bcrypt.hashSync(password, 10).catch(err => console.log(err));
+// const getToken = async (user) => {
+//   try {
+//     const res = jwt.sign({ user }, codes.secretKey, { expiresIn: '2h' });
+//     return res;
+//   } catch (err) {
+//     console.log(err);
+//   }
+//   return true;
+// };

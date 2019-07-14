@@ -12,6 +12,14 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -24,9 +32,13 @@ var checkUserQuery = _bookingQueries["default"].checkUserQuery,
     bookingQuery = _bookingQueries["default"].bookingQuery,
     checkBookingQuery = _bookingQueries["default"].checkBookingQuery,
     getBookingQuery = _bookingQueries["default"].getBookingQuery,
+    checkBookingsForUserQuery = _bookingQueries["default"].checkBookingsForUserQuery,
+    checkBookingForAdminQuery = _bookingQueries["default"].checkBookingForAdminQuery,
+    checkBookingForUserQuery = _bookingQueries["default"].checkBookingForUserQuery,
     deleteBookingQuery = _bookingQueries["default"].deleteBookingQuery,
     updateTripWithDeletedBookingQuery = _bookingQueries["default"].updateTripWithDeletedBookingQuery,
     deletedBookingQuery = _bookingQueries["default"].deletedBookingQuery,
+    checkTripByAdmin = _bookingQueries["default"].checkTripByAdmin,
     checkTrip = _bookingQueries["default"].checkTrip,
     checkSeats = _bookingQueries["default"].checkSeats,
     checkSeatsOnTrip = _bookingQueries["default"].checkSeatsOnTrip,
@@ -43,18 +55,15 @@ function () {
   _createClass(BookingController, null, [{
     key: "createBooking",
     value: function createBooking(req, res) {
-      var _req$body = req.body,
-          token = _req$body.token,
-          userId = _req$body.userId,
-          isAdmin = _req$body.isAdmin,
-          tripId = _req$body.tripId; // const newBooking = new Booking(userId, tripId);
+      var trip_id = req.body.trip_id;
+      var user_id = req.token.id; // const newBooking = new Booking(userId, tripId);
 
-      var updateData = [tripId];
-      var bookingData = [userId, tripId];
+      var updateData = [trip_id];
+      var bookingData = [user_id, trip_id];
 
       _connect["default"].query(checkUserQuery).then(function (result) {
         var foundUser = result.rows.filter(function (user) {
-          return user.id === parseInt(userId, 10);
+          return user.id === parseInt(user_id, 10);
         });
 
         if (foundUser.length < 1) {
@@ -65,7 +74,7 @@ function () {
           return;
         }
 
-        _connect["default"].query(getTripsQuery, [tripId]).then(function (result1) {
+        _connect["default"].query(getTripsQuery, [trip_id]).then(function (result1) {
           var foundTrip = result1.rows[0];
 
           if (!foundTrip) {
@@ -146,12 +155,20 @@ function () {
   }, {
     key: "getBookings",
     value: function getBookings(req, res) {
-      var _req$body2 = req.body,
-          token = _req$body2.token,
-          userId = _req$body2.userId,
-          isAdmin = _req$body2.isAdmin;
+      var _req$token = req.token,
+          id = _req$token.id,
+          is_admin = _req$token.is_admin;
+      var user_id = id;
+      console.log(user_id, is_admin);
+      var query;
 
-      _connect["default"].query(getBookingQuery).then(function (result) {
+      if (is_admin) {
+        query = [getBookingQuery];
+      } else {
+        query = [checkBookingsForUserQuery, [user_id]];
+      }
+
+      _connect["default"].query.apply(_connect["default"], _toConsumableArray(query)).then(function (result) {
         if (result.rows.length < 1) {
           res.status(404).json({
             status: 404,
@@ -186,15 +203,22 @@ function () {
   }, {
     key: "deleteBooking",
     value: function deleteBooking(req, res) {
-      var _req$body3 = req.body,
-          token = _req$body3.token,
-          userId = _req$body3.userId,
-          isAdmin = _req$body3.isAdmin;
-      var bookingId = req.params.bookingId; // console.log(bookingId, userId);
+      var booking_id = req.params.booking_id;
+      var _req$token2 = req.token,
+          id = _req$token2.id,
+          is_admin = _req$token2.is_admin;
+      var user_id = id; // console.log('user_id:', id, ', is_admin:', is_admin);
 
-      var checkData = [userId, bookingId];
+      var checkData = [user_id, booking_id];
+      var query;
 
-      _connect["default"].query(checkBookingQuery, checkData).then(function (result1) {
+      if (is_admin) {
+        query = [checkBookingForAdminQuery, [booking_id]];
+      } else {
+        query = [checkBookingForUserQuery, checkData];
+      }
+
+      _connect["default"].query.apply(_connect["default"], _toConsumableArray(query)).then(function (result1) {
         if (result1.rows.length < 1) {
           res.status(404).json({
             status: 404,
@@ -203,17 +227,8 @@ function () {
           return;
         }
 
-        _connect["default"].query(deleteBookingQuery, [bookingId]).then(function (result2) {
-          var data = result2.rows[0]; // console.log(data);
-          // if (data === undefined) {
-          //   res.status(404).json({
-          //     status: 404,
-          //     error: 'Booking found but not deleted',
-          //   });
-          //   return;
-          // }
-          // console.log('tripId', result1.rows[0].trip_id);
-
+        _connect["default"].query(deleteBookingQuery, [booking_id]).then(function (result2) {
+          var data = result2.rows[0];
           var updateTripWithDeletedBookingData = [1, result1.rows[0].trip_id];
 
           _connect["default"].query(updateTripWithDeletedBookingQuery, updateTripWithDeletedBookingData).then(function (result3) {
@@ -246,32 +261,41 @@ function () {
       var _checkAvailableSeats = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee(req, res) {
-        var _req$body4, token, userId, isAdmin, bookingId, _ref, rows, seats, oldSeatNumber, freeSeats, bookedSeats, availableSeats;
+        var _req$token3, id, is_admin, booking_id, user_id, query, _ref, rows, seats, oldSeatNumber, freeSeats, bookedSeats, availableSeats;
 
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _req$body4 = req.body, token = _req$body4.token, userId = _req$body4.userId, isAdmin = _req$body4.isAdmin;
-                bookingId = req.params.bookingId;
-                _context.next = 4;
-                return _connect["default"].query(checkTrip, [bookingId, userId]);
+                _req$token3 = req.token, id = _req$token3.id, is_admin = _req$token3.is_admin;
+                booking_id = req.params.booking_id;
+                user_id = parseInt(id, 10);
 
-              case 4:
+                if (is_admin) {
+                  query = [checkTripByAdmin, [booking_id]];
+                } else {
+                  query = [checkTrip, [booking_id, user_id]];
+                }
+
+                _context.next = 6;
+                return _connect["default"].query.apply(_connect["default"], _toConsumableArray(query));
+
+              case 6:
                 _ref = _context.sent;
                 rows = _ref.rows;
+                console.log(user_id, rows);
 
                 if (!rows.length) {
-                  _context.next = 17;
+                  _context.next = 20;
                   break;
                 }
 
-                console.log('bookingId ->', bookingId);
-                console.log('tripId ->', rows[0].trip_id);
-                _context.next = 11;
+                console.log('booking_id ->', booking_id);
+                console.log('trip_id ->', rows[0].trip_id);
+                _context.next = 14;
                 return _connect["default"].query(checkSeats, [rows[0].trip_id]);
 
-              case 11:
+              case 14:
                 seats = _context.sent;
                 oldSeatNumber = rows[0].seat_number;
                 console.log('old seat number', oldSeatNumber);
@@ -293,17 +317,17 @@ function () {
                   });
                 }
 
-                _context.next = 19;
+                _context.next = 22;
                 break;
 
-              case 17:
+              case 20:
                 console.log('Booking not found!');
                 res.status(404).json({
                   status: 404,
                   error: 'Booking not found!'
                 });
 
-              case 19:
+              case 22:
               case "end":
                 return _context.stop();
             }
@@ -323,19 +347,19 @@ function () {
       var _changeSeat = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee2(req, res) {
-        var tripId, _req$body5, oldSeatNumber, newSeatNumber, bookingId, _ref2, rows, freeSeats, bookedSeats, updateTrip, seatChanged;
+        var trip_id, _req$body, old_seat_number, new_seat_number, booking_id, _ref2, rows, freeSeats, bookedSeats, updateTrip, seatChanged;
 
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                tripId = req.body.tripId;
-                _req$body5 = req.body, oldSeatNumber = _req$body5.oldSeatNumber, newSeatNumber = _req$body5.newSeatNumber;
-                bookingId = req.params.bookingId;
-                oldSeatNumber = parseInt(oldSeatNumber, 10);
-                newSeatNumber = parseInt(newSeatNumber, 10);
+                trip_id = req.body.trip_id;
+                _req$body = req.body, old_seat_number = _req$body.old_seat_number, new_seat_number = _req$body.new_seat_number;
+                booking_id = req.params.booking_id;
+                old_seat_number = parseInt(old_seat_number, 10);
+                new_seat_number = parseInt(new_seat_number, 10);
                 _context2.next = 7;
-                return _connect["default"].query(checkSeatsOnTrip, [tripId]);
+                return _connect["default"].query(checkSeatsOnTrip, [trip_id]);
 
               case 7:
                 _ref2 = _context2.sent;
@@ -351,7 +375,7 @@ function () {
                 // console.log('booked seats', bookedSeats);
 
                 if (bookedSeats.filter(function (item) {
-                  return item === oldSeatNumber;
+                  return item === old_seat_number;
                 }).length) {
                   _context2.next = 16;
                   break;
@@ -366,25 +390,25 @@ function () {
 
               case 16:
                 if (!freeSeats.filter(function (item) {
-                  return item === newSeatNumber;
+                  return item === new_seat_number;
                 }).length) {
                   _context2.next = 28;
                   break;
                 }
 
-                freeSeats.splice(freeSeats.indexOf(newSeatNumber), 1, oldSeatNumber);
-                bookedSeats.splice(bookedSeats.indexOf(oldSeatNumber), 1, newSeatNumber); // console.log(oldSeatNumber, newSeatNumber);
+                freeSeats.splice(freeSeats.indexOf(new_seat_number), 1, old_seat_number);
+                bookedSeats.splice(bookedSeats.indexOf(old_seat_number), 1, new_seat_number); // console.log(oldSeatNumber, newSeatNumber);
                 // console.log(freeSeats.filter(item => item === newSeatNumber));
                 // console.log(freeSeats.filter(item => item === oldSeatNumber));
                 // console.log(freeSeats, bookedSeats);
 
                 _context2.next = 21;
-                return _connect["default"].query(updateSeatsOnTrip, [bookedSeats.length, freeSeats, bookedSeats, tripId]);
+                return _connect["default"].query(updateSeatsOnTrip, [bookedSeats.length, freeSeats, bookedSeats, trip_id]);
 
               case 21:
                 updateTrip = _context2.sent;
                 _context2.next = 24;
-                return _connect["default"].query(updateSeatsOnBooking, [newSeatNumber, bookingId]);
+                return _connect["default"].query(updateSeatsOnBooking, [new_seat_number, booking_id]);
 
               case 24:
                 seatChanged = _context2.sent;
@@ -393,7 +417,7 @@ function () {
                   res.status(200).json({
                     status: 200,
                     data: rows[0],
-                    message: "Your seat number has been changed from ".concat(oldSeatNumber, " to ").concat(newSeatNumber)
+                    message: "Your seat number has been changed from ".concat(old_seat_number, " to ").concat(new_seat_number)
                   });
                 }
 
@@ -425,130 +449,4 @@ function () {
   return BookingController;
 }();
 
-module.exports = BookingController; // static createBooking(req, res) {
-//     const {
-//       token, userId, isAdmin, tripId,
-//     } = req.body;
-//     // const newBooking = new Booking(userId, tripId);
-//     const updateData = [tripId];
-//     const bookingData = [userId, tripId];
-//     db.query(checkUser)
-//       .then((result) => {
-//         const foundUser = result.rows.filter(user => user.id === parseInt(userId, 10));
-//         if (foundUser.length < 1) {
-//           res.status(404).json({
-//             status: 404,
-//             error: 'User not registered',
-//           });
-//           return;
-//         }
-//         db.query(getTripsQuery, [tripId])
-//           .then((result1) => {
-//             const foundTrip = result1.rows[0];
-//             if (!foundTrip) {
-//               res.status(404).json({
-//                 status: 404,
-//                 error: 'Trip is not available',
-//               });
-//               return;
-//             }
-//             if (foundTrip.status === 'cancelled') {
-//               res.status(404).json({
-//                 status: 404,
-//                 error: 'Trip has been cancelled',
-//               });
-//               return;
-//             }
-//             if (foundTrip.booking_status === foundTrip.capacity) {
-//               res.status(404).json({
-//                 status: 404,
-//                 error: 'Sorry please, No more empty seats- Trip is fully booked',
-//               });
-//               return;
-//             }
-//             db.query(checkBookingQuery, bookingData)
-//               .then((result2) => {
-//                 const tripBooked = result2.rows[0];
-//                 if (tripBooked) {
-//                   res.status(404).json({
-//                     status: 404,
-//                     error: 'You are booked on this trip already',
-//                   });
-//                   return;
-//                 }
-//                 db.query(updateTripQuery, updateData)
-//                   .then((result3) => {
-//                     const tripUpdate = result3.rows[0];
-//                     const seatNo = tripUpdate.booked_seats[tripUpdate.booked_seats.length - 1];
-//                     console.log(seatNo);
-//                     const moreBookingData = [foundTrip.bus_id, foundTrip.origin, foundTrip.destination, tripUpdate.trip_date, seatNo];
-//                     const completeBookingData = [...bookingData, ...moreBookingData];
-//                     db.query(bookingQuery, completeBookingData)
-//                       .then((result4) => {
-//                         const booking = result4.rows[0];
-//                         const data = {
-//                           booking_id: booking.id,
-//                           trip_id: booking.trip_id,
-//                           user_id: booking.user_id,
-//                           bus_id: booking.bus_id,
-//                           origin: booking.origin,
-//                           destination: booking.destination,
-//                           trip_date: tripUpdate.trip_date,
-//                           seat_number: tripUpdate.booking_status,
-//                           message: 'Your trip has been booked',
-//                         };
-//                         res.status(201).json({
-//                           status: 201,
-//                           data,
-//                         });
-//                       })
-//                       .catch(err => console.log(err));
-//                   })
-//                   .catch(err => console.log(err));
-//               })
-//               .catch(err => console.log(err));
-//           })
-//           .catch(err => console.log(err));
-//       })
-//       .catch(err => console.log(err));
-// }
-// ///////////////////////////////////////////
-// const {
-//   token, userId, isAdmin, tripId,
-// } = req.body;
-// const newBooking = new Booking(userId, tripId);
-// const updateData = [tripId];
-// const bookingData = [userId, tripId];
-// newBooking.userCheck(userId)
-//   .then((foundUser) => {
-//     if (foundUser.length < 1) {
-//       newBooking.notRegistered(res);
-//     } else {
-//       console.log('foundUser', foundUser);
-//       newBooking.checkTrip(tripId, res)
-//         .then((foundTrip) => {
-//           newBooking.tripResponse(foundTrip, res);
-//           // console.log(foundTrip);
-//           newBooking.checkBooking(res)
-//             .then((booked) => {
-//               console.log(booked);
-//               if (booked.length > 0) {
-//                 newBooking.alreadyBooked(res);
-//                 return;
-//               }
-//               newBooking.updateTrip()
-//                 .then((tripUpdate) => {
-//                   console.log(tripUpdate);
-//                   const seatNo = tripUpdate.booked_seats[tripUpdate.booked_seats.length - 1];
-//                   console.log(seatNo);
-//                   const moreBookingData = [foundTrip.bus_id, foundTrip.origin, foundTrip.destination, tripUpdate.trip_date, seatNo];
-//                   const completeBookingData = [...bookingData, ...moreBookingData];
-//                   newBooking.makeBooking(tripUpdate, completeBookingData, res)
-//                     .then((tripBooked) => {
-//                       console.log(tripBooked);
-//                     });
-//                 });
-//             });
-//         });
-//     }
-//   });
+module.exports = BookingController;
