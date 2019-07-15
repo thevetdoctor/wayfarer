@@ -39,8 +39,8 @@ app.use('/api/v1/docs', _swaggerUiExpress["default"].serve, _swaggerUiExpress["d
 // Link routeHandler
 
 (0, _routes["default"])(app); // Declare root path
-// console.log(__dirname);
 
+console.log(__dirname);
 app.get('/api/v1', function (req, res) {
   res.sendFile(_path["default"].join(__dirname.replace('src', ''), '/index.html'));
 });

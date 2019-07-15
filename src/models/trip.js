@@ -52,7 +52,15 @@ class Trip {
     console.log('rows', rows);
     return res.status(201).json({
       status: 201,
-      data: 'Trip created',
+      data: {
+        trip_id: rows[0].id,
+        bus_id: rows[0].bus_id,
+        origin: rows[0].origin,
+        destination: rows[0].destination,
+        trip_date: rows[0].trip_date,
+        fare: rows[0].fare,
+        message: 'Trip created',
+      },
     });
   }
 
@@ -116,7 +124,9 @@ class Trip {
 
     res.status(205).json({
       status: 205,
-      message: 'Trip cancelled successfully',
+      data: {
+        message: 'Trip cancelled successfully',
+      },
     });
   }
 

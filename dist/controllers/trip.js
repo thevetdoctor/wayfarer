@@ -20,6 +20,16 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var cancelTripQuery = _tripQueries["default"].cancelTripQuery,
     filterQuery = _tripQueries["default"].filterQuery;
 
+var seats = function seats(busCapacity) {
+  var arr = [];
+
+  for (var i = 1; i <= busCapacity; i++) {
+    arr.push(i);
+  }
+
+  return arr;
+};
+
 var TripController =
 /*#__PURE__*/
 function () {
@@ -53,7 +63,8 @@ function () {
             return trip.alreadyAssigned(tripActive, res);
           }
 
-          trip.details = [trip.bus_id, trip.origin, trip.destination, trip.fare];
+          console.log(seats(bus[0].capacity));
+          trip.details = [trip.bus_id, trip.origin, trip.destination, trip.fare, seats(bus[0].capacity), []];
           trip.create(trip.details, res);
         }
       });

@@ -12,7 +12,7 @@ const data = {
 
 // console.log(data);
 
-module.exports = { herokuConfig, data };
+module.exports = herokuConfig;
 
 
 // const data = {

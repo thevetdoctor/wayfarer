@@ -2,7 +2,7 @@
 
 module.exports = {
   //   booking queries
-  checkUserQuery: 'SELECT id FROM users',
+  checkUserQuery: 'SELECT id, email, first_name, last_name FROM users',
   getTripsQuery: "SELECT * FROM trips INNER JOIN buses\n                  ON trips.bus_id = buses.id\n                  WHERE trips.id = $1",
   checkBookingQuery: "SELECT * FROM bookings INNER JOIN users\n                      ON bookings.user_id = users.id\n                      WHERE user_id = $1\n                      AND trip_id = $2",
   updateTripQuery: "UPDATE trips\n                    SET booking_status = booking_status + 1,\n                        free_seats = free_seats[2: array_length(free_seats, 1)],\n                        booked_seats[array_length(booked_seats, 1) + 1] = free_seats[1],\n                        passengers = array_length(booked_seats, 1) + 1\n                    WHERE id = $1 RETURNING *",

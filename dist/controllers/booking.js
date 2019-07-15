@@ -74,6 +74,8 @@ function () {
           return;
         }
 
+        console.log('found user', foundUser);
+
         _connect["default"].query(getTripsQuery, [trip_id]).then(function (result1) {
           var foundTrip = result1.rows[0];
 
@@ -103,6 +105,7 @@ function () {
 
           _connect["default"].query(checkBookingQuery, bookingData).then(function (result2) {
             var tripBooked = result2.rows[0];
+            console.log(result2.rows[0]);
 
             if (tripBooked) {
               res.status(404).json({
@@ -123,13 +126,16 @@ function () {
                 var booking = result4.rows[0];
                 var data = {
                   booking_id: booking.id,
-                  trip_id: booking.trip_id,
                   user_id: booking.user_id,
+                  trip_id: booking.trip_id,
                   bus_id: booking.bus_id,
                   origin: booking.origin,
                   destination: booking.destination,
                   trip_date: tripUpdate.trip_date,
                   seat_number: tripUpdate.booking_status,
+                  first_name: foundUser[0].first_name,
+                  last_name: foundUser[0].last_name,
+                  email: foundUser[0].email,
                   message: 'Your trip has been booked'
                 };
                 res.status(201).json({
@@ -180,8 +186,8 @@ function () {
         var data = result.rows.map(function (item) {
           return {
             booking_id: item.id,
-            trip_id: item.trip_id,
             user_id: item.user_id,
+            trip_id: item.trip_id,
             bus_id: item.bus_id,
             origin: item.origin,
             destination: item.destination,
@@ -240,7 +246,9 @@ function () {
               // console.log(result4.rows);
               res.status(200).json({
                 status: 200,
-                message: 'Booking deleted successfully'
+                data: {
+                  message: 'Booking deleted successfully'
+                }
               });
             })["catch"](function (err) {
               return console.log(err);
