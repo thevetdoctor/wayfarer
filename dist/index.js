@@ -40,9 +40,9 @@ app.use('/api/v1/docs', _swaggerUiExpress["default"].serve, _swaggerUiExpress["d
 
 (0, _routes["default"])(app); // Declare root path
 
-console.log(__dirname);
+console.log(_path["default"].join(__dirname.replace('src', 'dist'), '/index.html'));
 app.get('/api/v1', function (req, res) {
-  res.sendFile(_path["default"].join(__dirname.replace('src', ''), '/index.html'));
+  res.sendFile(_path["default"].join(__dirname.replace('src', 'dist'), '/index.html'));
 });
 app.use(function (err, req, res, next) {
   console.error(err.stack);

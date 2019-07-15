@@ -35,9 +35,9 @@ routeHandler(app);
 
 
 // Declare root path
-console.log(__dirname);
+console.log(path.join(__dirname.replace('src', 'dist'), '/index.html'));
 app.get('/api/v1', (req, res) => {
-  res.sendFile(path.join(__dirname.replace('src', ''), '/index.html'));
+  res.sendFile(path.join(__dirname.replace('src', 'dist'), '/index.html'));
 });
 
 

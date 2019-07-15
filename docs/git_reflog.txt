@@ -1,0 +1,137 @@
+$ git reflog
+9cdb6fc HEAD@{0}: checkout: moving from ch-swagger-documentation-167107161 to develop
+846f466 HEAD@{1}: checkout: moving from temp to ch-swagger-documentation-167107161
+846f466 HEAD@{2}: checkout: moving from ch-swagger-documentation-167107161 to temp
+846f466 HEAD@{3}: commit: chore(documentation):document api
+4606071 HEAD@{4}: checkout: moving from heroku to ch-swagger-documentation-167107161
+4606071 HEAD@{5}: commit: heroku
+c400a95 HEAD@{6}: commit: readded procfile
+121df3f HEAD@{7}: commit: restarted vscode
+7fef6e2 HEAD@{8}: commit: heroku-add node engine to package json
+931d7dc HEAD@{9}: commit: heroku
+9cdb6fc HEAD@{10}: checkout: moving from develop to heroku
+9cdb6fc HEAD@{11}: pull origin develop: Fast-forward
+b383388 HEAD@{12}: checkout: moving from ch-validate-secure-endpoints-#167122778 to develop
+f5af143 HEAD@{13}: commit: chore(refactor):refactor code
+b383388 HEAD@{14}: checkout: moving from ch-validate-secure-endpoints to ch-validate-secure-endpoints-#167122778
+b383388 HEAD@{15}: checkout: moving from ch-refactor-code-167112681 to ch-validate-secure-endpoints
+92adfe1 HEAD@{16}: checkout: moving from develop to ch-refactor-code-167112681
+b383388 HEAD@{17}: checkout: moving from ch-validate-secure-endpoints to develop
+b383388 HEAD@{18}: checkout: moving from develop to ch-validate-secure-endpoints
+b383388 HEAD@{19}: pull origin develop: Fast-forward
+753e7c0 HEAD@{20}: checkout: moving from ch-refactor-code-167112681 to develop
+92adfe1 HEAD@{21}: commit: chore(refactor):code refactor
+9b47732 HEAD@{22}: checkout: moving from ch-refactor-code-#167112681 to ch-refactor-code-167112681
+9b47732 HEAD@{23}: commit: heroku
+...skipping...
+9cdb6fc HEAD@{0}: checkout: moving from ch-swagger-documentation-167107161 to develop
+846f466 HEAD@{1}: checkout: moving from temp to ch-swagger-documentation-167107161
+846f466 HEAD@{2}: checkout: moving from ch-swagger-documentation-167107161 to temp
+846f466 HEAD@{3}: commit: chore(documentation):document api
+4606071 HEAD@{4}: checkout: moving from heroku to ch-swagger-documentation-1671071614606071 HEAD@{5}: commit: heroku
+c400a95 HEAD@{6}: commit: readded procfile
+121df3f HEAD@{7}: commit: restarted vscode
+7fef6e2 HEAD@{8}: commit: heroku-add node engine to package json
+931d7dc HEAD@{9}: commit: heroku
+9cdb6fc HEAD@{10}: checkout: moving from develop to heroku
+9cdb6fc HEAD@{11}: pull origin develop: Fast-forward
+b383388 HEAD@{12}: checkout: moving from ch-validate-secure-endpoints-#167122778 to developf5af143 HEAD@{13}: commit: chore(refactor):refactor code
+b383388 HEAD@{14}: checkout: moving from ch-validate-secure-endpoints to ch-validate-secure-endpoints-#167122778
+b383388 HEAD@{15}: checkout: moving from ch-refactor-code-167112681 to ch-validate-secure-endpoints
+92adfe1 HEAD@{16}: checkout: moving from develop to ch-refactor-code-167112681
+b383388 HEAD@{17}: checkout: moving from ch-validate-secure-endpoints to develop
+b383388 HEAD@{18}: checkout: moving from develop to ch-validate-secure-endpoints
+b383388 HEAD@{19}: pull origin develop: Fast-forward
+753e7c0 HEAD@{20}: checkout: moving from ch-refactor-code-167112681 to develop
+92adfe1 HEAD@{21}: commit: chore(refactor):code refactor
+9b47732 HEAD@{22}: checkout: moving from ch-refactor-code-#167112681 to ch-refactor-code-167112681
+9b47732 HEAD@{23}: commit: heroku
+...skipping...
+9cdb6fc HEAD@{0}: checkout: moving from ch-swagger-documentation-167107161 to develop
+846f466 HEAD@{1}: checkout: moving from temp to ch-swagger-documentation-167107161
+846f466 HEAD@{2}: checkout: moving from ch-swagger-documentation-167107161 to temp
+846f466 HEAD@{3}: commit: chore(documentation):document api4606071 HEAD@{4}: checkout: moving from heroku to ch-swagger-documentation-167107161
+4606071 HEAD@{5}: commit: heroku
+c400a95 HEAD@{6}: commit: readded procfile
+121df3f HEAD@{7}: commit: restarted vscode
+7fef6e2 HEAD@{8}: commit: heroku-add node engine to package json
+931d7dc HEAD@{9}: commit: heroku
+9cdb6fc HEAD@{10}: checkout: moving from develop to heroku
+9cdb6fc HEAD@{11}: pull origin develop: Fast-forward
+b383388 HEAD@{12}: checkout: moving from ch-validate-secure-endpoints-#167122778 to developf5af143 HEAD@{13}: commit: chore(refactor):refactor code
+b383388 HEAD@{14}: checkout: moving from ch-validate-secure-endpoints to ch-validate-secure-endpoints-#167122778
+b383388 HEAD@{15}: checkout: moving from ch-refactor-code-167112681 to ch-validate-secure-endpoints
+92adfe1 HEAD@{16}: checkout: moving from develop to ch-refactor-code-167112681
+b383388 HEAD@{17}: checkout: moving from ch-validate-secure-endpoints to develop
+b383388 HEAD@{18}: checkout: moving from develop to ch-validate-secure-endpoints
+b383388 HEAD@{19}: pull origin develop: Fast-forward
+753e7c0 HEAD@{20}: checkout: moving from ch-refactor-code-167112681 to develop
+92adfe1 HEAD@{21}: commit: chore(refactor):code refactor
+9b47732 HEAD@{22}: checkout: moving from ch-refactor-code-#167112681 to ch-refactor-code-167112681
+9b47732 HEAD@{23}: commit: heroku
+7b42990 HEAD@{24}: commit: heroku
+c3c7550 HEAD@{25}: commit: heroku push
+753e7c0 HEAD@{26}: checkout: moving from develop to ch-refactor-code-#167112681
+753e7c0 HEAD@{27}: checkout: moving from ch-refactor-code-#167112681 to develop
+753e7c0 HEAD@{28}: checkout: moving from develop to ch-refactor-code-#167112681
+753e7c0 HEAD@{29}: pull origin develop: Fast-forward
+a98f5c3 HEAD@{30}: checkout: moving from ft-change-seat-number-167107107 to develop
+803032f HEAD@{31}: commit: feature(changeSeat):change seat number
+a98f5c3 HEAD@{32}: checkout: moving from develop to ft-change-seat-number-167107107
+a98f5c3 HEAD@{33}: pull origin develop: Fast-forward
+f7077df HEAD@{34}: checkout: moving from ft-filter-trips-destination-167107039 to develop
+7d9764c HEAD@{35}: commit: feature(filter):filter trips
+f7077df HEAD@{36}: checkout: moving from develop to ft-filter-trips-destination-167107039
+f7077df HEAD@{37}: pull origin develop: Fast-forward
+e2912af HEAD@{38}: checkout: moving from ft-filter-trips-destination-167107039 to develop
+e2912af HEAD@{39}: checkout: moving from develop to ft-filter-trips-destination-167107039
+e2912af HEAD@{40}: checkout: moving from ft-filter-trips-origin-167106979 to develop
+53231cb HEAD@{41}: commit: feature(filter):filter trips
+e2912af HEAD@{42}: checkout: moving from develop to ft-filter-trips-origin-167106979
+e2912af HEAD@{43}: pull origin develop: Fast-forward
+9659414 HEAD@{44}: checkout: moving from ft-admin-cancel-trip-#167106746 to develop
+aea9038 HEAD@{45}: commit: feature(trip):cancel trip
+9659414 HEAD@{46}: checkout: moving from develop to ft-admin-cancel-trip-#167106746
+9659414 HEAD@{47}: pull origin develop: Fast-forward
+fec1167 HEAD@{48}: checkout: moving from ft-delete-booking-167106681 to develop
+13641b2 HEAD@{49}: commit: feature(booking):delete booking
+fec1167 HEAD@{50}: checkout: moving from develop to ft-delete-booking-167106681
+fec1167 HEAD@{51}: pull origin develop: Fast-forward
+f9717c1 HEAD@{52}: checkout: moving from ft-view-all-bookings-167106628 to develop
+742f4ee HEAD@{53}: commit: feature(bookings):view bookings
+f9717c1 HEAD@{54}: checkout: moving from develop to ft-view-all-bookings-167106628
+f9717c1 HEAD@{55}: pull origin develop: Fast-forward
+5311cd5 HEAD@{56}: checkout: moving from ft-book-a-trip-167106526 to develop
+71ba89f HEAD@{57}: commit: feature(booking):make a booking
+5311cd5 HEAD@{58}: checkout: moving from develop to ft-book-a-trip-167106526
+5311cd5 HEAD@{59}: pull origin develop: Fast-forward
+cc2ea1e HEAD@{60}: checkout: moving from ft-get-all-trips-167080016 to develop
+e8049e8 HEAD@{61}: commit: feature(trips):get trips
+cc2ea1e HEAD@{62}: checkout: moving from develop to ft-get-all-trips-167080016
+cc2ea1e HEAD@{63}: pull origin develop: Fast-forward
+1944719 HEAD@{64}: checkout: moving from ft-admin-create-trip-167079718 to develop
+2a601a5 HEAD@{65}: commit: feature(trip):create trip endpoint
+1944719 HEAD@{66}: checkout: moving from develop to ft-admin-create-trip-167079718
+1944719 HEAD@{67}: pull origin develop: Fast-forward
+76dbe91 HEAD@{68}: checkout: moving from ft-user-signin-endpoint-167079656 to develop
+c95cbc3 HEAD@{69}: commit: feature(signin):add signin endpoint
+76dbe91 HEAD@{70}: checkout: moving from develop to ft-user-signin-endpoint-167079656
+76dbe91 HEAD@{71}: pull origin develop: Fast-forward
+f999fbb HEAD@{72}: checkout: moving from ft-user-signup-endpoint-167079577 to develop
+fa8c04a HEAD@{73}: commit: feature(signup):add endpoint
+f999fbb HEAD@{74}: checkout: moving from develop to ft-user-signup-endpoint-167079577
+f999fbb HEAD@{75}: pull origin develop: Fast-forward
+b80126d HEAD@{76}: checkout: moving from ch-setup-continuous-integration-167081456 to develop
+396b89c HEAD@{77}: commit: chore(coverage):add coveralls
+b80126d HEAD@{78}: checkout: moving from develop to ch-setup-continuous-integration-167081456
+b80126d HEAD@{79}: pull origin develop: Fast-forward
+603777f HEAD@{80}: checkout: moving from ch-setup-postgresql-167078651 to develop
+bd6ab28 HEAD@{81}: commit: chore(database):setup database postgresql
+603777f HEAD@{82}: checkout: moving from develop to ch-setup-postgresql-167078651
+603777f HEAD@{83}: pull origin develop: Fast-forward
+3baf35e HEAD@{84}: checkout: moving from ch-setup-development-environment-167078157 to develop
+ac147dd HEAD@{85}: commit: chore(enviroment):setup development environment
+3baf35e HEAD@{86}: checkout: moving from develop to ch-setup-development-environment-167078157
+3baf35e HEAD@{87}: commit: initial commit on develop branch
+ee12630 HEAD@{88}: checkout: moving from master to develop
+ee12630 HEAD@{89}: clone: from https://github.com/thevetdoctor/wayfarer.git
