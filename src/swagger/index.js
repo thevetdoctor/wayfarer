@@ -12,7 +12,7 @@ const swaggerDefinition = {
 };
 
 if (process.env.NODE_ENV === 'production') {
-  swaggerDefinition.host = 'https://wayfarenaija.herokuapp.com';
+  swaggerDefinition.host = 'wayfarenaija.herokuapp.com';
 }
 
 // options for the swagger docs
