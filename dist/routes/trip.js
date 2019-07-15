@@ -19,7 +19,7 @@ var router = _express["default"].Router();
 
 router.post('/', _auth["default"], _adminAuth["default"], _trip["default"].createTrip);
 router.get('/', _auth["default"], _trip["default"].getTrips);
-router.patch('/:tripId', _auth["default"], _adminAuth["default"], _trip["default"].cancelTrip);
+router.patch('/:trip_id', _auth["default"], _adminAuth["default"], _trip["default"].cancelTrip);
 router.get('/:search', _auth["default"], _trip["default"].filterTrip);
 var _default = router;
 exports["default"] = _default;

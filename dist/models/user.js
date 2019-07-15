@@ -26,15 +26,15 @@ var createUserQuery = _userQueries["default"].createUserQuery,
 var User =
 /*#__PURE__*/
 function () {
-  function User(email, firstName, lastName, password) {
+  function User(email, first_name, last_name, password) {
     _classCallCheck(this, User);
 
     this.id = null;
     this.email = email;
-    this.firstName = firstName;
-    this.lastName = lastName;
+    this.first_name = first_name;
+    this.last_name = last_name;
     this.password = password;
-    this.isAdmin = null;
+    this.is_admin = null;
   }
 
   _createClass(User, [{

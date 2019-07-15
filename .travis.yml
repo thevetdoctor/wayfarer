@@ -16,10 +16,10 @@ services :
 
 postgres:
   adapter: postgresql
-  database: DB_DATABASE
+  database: wayfare_testdb
   username: postgres
 
-before_script:
+# before_script:
   - psql -c 'create database wayfare_testdb;' -U postgres
   - psql -c 'create user with password animalworld;' -U postgres
 
@@ -30,13 +30,13 @@ env:
 
 before_script:
   # - chmod 0777 ./node_modules/.bin/mocha
+  - ./cc-test-reporter before-build
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
 
 script:
+ - npm run cover
  - npm run coveralls
- - npm run coverage
 
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT

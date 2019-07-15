@@ -2,6 +2,7 @@
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 /* eslint-disable camelcase */
+/* eslint-disable no-plusplus */
 // import regeneratorRuntime from 'regenerator-runtime';
 import tripQueries from '../helpers/queries/tripQueries';
 import Trip from '../models/trip';
@@ -13,6 +14,13 @@ const {
   filterQuery,
 } = tripQueries;
 
+const seats = (busCapacity) => {
+  const arr = [];
+  for (let i = 1; i <= busCapacity; i++) {
+    arr.push(i);
+  }
+  return arr;
+};
 
 class TripController {
   // 1. create a new trip
@@ -36,7 +44,8 @@ class TripController {
           if (tripActive.length) {
             return trip.alreadyAssigned(tripActive, res);
           }
-          trip.details = [trip.bus_id, trip.origin, trip.destination, trip.fare];
+          console.log(seats(bus[0].capacity));
+          trip.details = [trip.bus_id, trip.origin, trip.destination, trip.fare, seats(bus[0].capacity), []];
           trip.create(trip.details, res);
         }
       });

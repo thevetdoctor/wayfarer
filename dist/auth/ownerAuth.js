@@ -8,9 +8,9 @@ exports["default"] = void 0;
 /* eslint-disable no-console */
 var ownerAuth = function ownerAuth(req, res, next) {
   console.log('token', req.token);
-  console.log('userId', req.userId);
+  console.log('user_id from token:', req.token.id); // req.token.id = undefined;
 
-  if (req.token.id === req.userId || req.token.is_admin === true) {
+  if (req.token.id || req.token.is_admin === true) {
     next();
   } else {
     res.status(403).json({

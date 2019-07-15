@@ -41,18 +41,18 @@ var checkUserQuery = _bookingQueries["default"].checkUserQuery,
 var Booking =
 /*#__PURE__*/
 function () {
-  function Booking(userId, tripId) {
+  function Booking(user_id, trip_id) {
     _classCallCheck(this, Booking);
 
     this.id = null;
-    this.tripId = tripId;
-    this.userId = userId;
-    this.busId = null;
+    this.trip_id = trip_id;
+    this.user_id = user_id;
+    this.bus_id = null;
     this.origin = null;
     this.destination = null;
-    this.tripDate = null;
-    this.seatNumber = null;
-    this.createdOn = null;
+    this.trip_date = null;
+    this.seat_number = null;
+    this.created_on = null;
   }
 
   _createClass(Booking, [{
@@ -60,7 +60,7 @@ function () {
     value: function () {
       var _userCheck = _asyncToGenerator(
       /*#__PURE__*/
-      _regeneratorRuntime["default"].mark(function _callee(userId) {
+      _regeneratorRuntime["default"].mark(function _callee(user_id) {
         var _this = this;
 
         var _ref, rows, foundUser;
@@ -76,7 +76,7 @@ function () {
                 _ref = _context.sent;
                 rows = _ref.rows;
                 foundUser = rows.filter(function (user) {
-                  return user.id === parseInt(_this.userId, 10);
+                  return user.id === parseInt(_this.user_id, 10);
                 });
                 return _context.abrupt("return", foundUser);
 
@@ -99,7 +99,7 @@ function () {
     value: function () {
       var _checkTrip = _asyncToGenerator(
       /*#__PURE__*/
-      _regeneratorRuntime["default"].mark(function _callee2(tripId, res) {
+      _regeneratorRuntime["default"].mark(function _callee2(trip_id, res) {
         var _ref2, rows, foundTrip;
 
         return _regeneratorRuntime["default"].wrap(function _callee2$(_context2) {
@@ -107,7 +107,7 @@ function () {
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return _connect["default"].query(getTripsQuery, [this.tripId]);
+                return _connect["default"].query(getTripsQuery, [this.trip_id]);
 
               case 2:
                 _ref2 = _context2.sent;
@@ -142,7 +142,7 @@ function () {
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.next = 2;
-                return _connect["default"].query(checkBookingQuery, [this.userId, this.tripId]);
+                return _connect["default"].query(checkBookingQuery, [this.user_id, this.trip_id]);
 
               case 2:
                 _ref3 = _context3.sent;
@@ -175,7 +175,7 @@ function () {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                _db$query = _connect["default"].query(updateTripQuery, [this.tripId]), rows = _db$query.rows;
+                _db$query = _connect["default"].query(updateTripQuery, [this.trip_id]), rows = _db$query.rows;
                 return _context4.abrupt("return", rows);
 
               case 2:

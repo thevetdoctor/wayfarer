@@ -11,10 +11,7 @@ var data = {
   port: 5432
 }; // console.log(data);
 
-module.exports = {
-  herokuConfig: herokuConfig,
-  data: data
-}; // const data = {
+module.exports = herokuConfig; // const data = {
 //     db_name: 'da0qeua1di6o1l',
 //     db_user: 'teqjchzuxpwxfv',
 //     db_host: '@ec2-23-21-160-38.compute-1.amazonaws.com',

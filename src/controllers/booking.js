@@ -48,6 +48,7 @@ class BookingController {
           });
           return;
         }
+        console.log('found user', foundUser);
 
         db.query(getTripsQuery, [trip_id])
           .then((result1) => {
@@ -81,7 +82,7 @@ class BookingController {
             db.query(checkBookingQuery, bookingData)
               .then((result2) => {
                 const tripBooked = result2.rows[0];
-
+                console.log(result2.rows[0]);
 
                 if (tripBooked) {
                   res.status(404).json({
@@ -106,13 +107,16 @@ class BookingController {
 
                         const data = {
                           booking_id: booking.id,
-                          trip_id: booking.trip_id,
                           user_id: booking.user_id,
+                          trip_id: booking.trip_id,
                           bus_id: booking.bus_id,
                           origin: booking.origin,
                           destination: booking.destination,
                           trip_date: tripUpdate.trip_date,
                           seat_number: tripUpdate.booking_status,
+                          first_name: foundUser[0].first_name,
+                          last_name: foundUser[0].last_name,
+                          email: foundUser[0].email,
                           message: 'Your trip has been booked',
                         };
 
@@ -157,8 +161,8 @@ class BookingController {
         const data = result.rows.map(item => (
           {
             booking_id: item.id,
-            trip_id: item.trip_id,
             user_id: item.user_id,
+            trip_id: item.trip_id,
             bus_id: item.bus_id,
             origin: item.origin,
             destination: item.destination,
@@ -224,7 +228,9 @@ class BookingController {
 
                     res.status(200).json({
                       status: 200,
-                      message: 'Booking deleted successfully',
+                      data: {
+                        message: 'Booking deleted successfully',
+                      },
                     });
                   })
                   .catch(err => console.log(err));

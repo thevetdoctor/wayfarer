@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports["default"] = void 0;
 var _default = {
   //   trip queries
-  createTripQuery: 'INSERT INTO trips (bus_id, origin, destination, fare) VALUES ($1, $2, $3, $4) RETURNING *',
+  createTripQuery: 'INSERT INTO trips (bus_id, origin, destination, fare, free_seats, booked_seats) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
   findBusQuery: 'SELECT * FROM trips INNER JOIN buses ON trips.bus_id = buses.id WHERE bus_id = $1',
   getAllTripsQuery: 'SELECT * FROM trips ORDER BY id DESC',
   checkTripQuery: 'SELECT * FROM trips WHERE id = $1',

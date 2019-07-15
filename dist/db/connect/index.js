@@ -7,8 +7,7 @@ var _require = require('pg'),
 
 var testConfig = require('../config/wayfare_testdb');
 
-var _require2 = require('../config/herokuConfig'),
-    herokuconfig = _require2.herokuconfig; // const { data } = require('../config/herokuConfig');
+var herokuConfig = require('../config/herokuConfig'); // const { data } = require('../config/herokuConfig');
 // import { Client } from 'pg';
 // import configString from '../config';
 // import herokuconfig from '../config/herokuConfig';
@@ -16,11 +15,11 @@ var _require2 = require('../config/herokuConfig'),
 
 var db;
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV !== 'production') {
   console.log('heroku wayfare DB');
-  console.log(herokuconfig);
+  console.log('heroku config', herokuConfig);
   db = new Client({
-    connectionString: herokuconfig,
+    connectionString: herokuConfig,
     ssl: true
   }); // } else if (process.env.NODE_ENV === 'test ') {
   // console.log('wayfare_test DB');

@@ -28,11 +28,11 @@ var getBusesQuery = _busQueries["default"].getBusesQuery;
 var Bus =
 /*#__PURE__*/
 function () {
-  function Bus(numberPlate, manufacturer, model, year, capacity) {
+  function Bus(number_plate, manufacturer, model, year, capacity) {
     _classCallCheck(this, Bus);
 
     this.id = null;
-    this.numberPlate = numberPlate;
+    this.number_plate = number_plate;
     this.manufacturer = manufacturer;
     this.model = model;
     this.year = year;
@@ -79,7 +79,7 @@ function () {
       var buses = rows.map(function (item) {
         return {
           bus_id: item.id,
-          numberPlate: item.numberPlate,
+          number_plate: item.number_plate,
           manufacturer: item.manufacturer,
           model: item.model,
           year: item.year,
