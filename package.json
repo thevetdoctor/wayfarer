@@ -7,17 +7,15 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "mocha --timeout 30000 --exit --require @babel/register ./src/test",
-    "pretest": "npm run migrate",
+    "test": "set NODE_ENV=test&& mocha --require @babel/register ./src/test",
     "start": "node ./dist/index.js",
     "dev": "nodemon --exec babel-node ./src/index.js",
-    "devt": "npm run build && node dist/index.js",
+    "devt": "npm run build && npm run start",
     "removedist": "rm -rf ./dist",
     "build": "npm run removedist && babel src --out-dir dist --copy-files",
-    "serve": "node dist/index.js",
-    "migrate": "set NODE_ENV=test && node ./src/db/migrations/index.js && exit 0",
+    "migrate": "set NODE_ENV=test && node ./src/db/migrations/index.js",
     "cover": "nyc report --reporter=text-lcov | coveralls",
-    "coveralls": "nyc --reporter=lcov --reporter=text-lcov npm test"
+    "coveralls": "nyc npm test && npm run coverage"
   },
   "repository": {
     "type": "git",

@@ -11,7 +11,7 @@ const herokuConfig = require('../config/herokuConfig');
 
 let db;
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV === 'production') {
   console.log('heroku wayfare DB');
   console.log('heroku config', herokuConfig);
   db = new Client({
