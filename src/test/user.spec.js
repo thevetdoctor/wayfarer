@@ -4,7 +4,7 @@
 /* eslint-disable no-unused-expressions */
 import chai, { should } from 'chai';
 import chaiHttp from 'chai-http';
-import server from '../../index';
+import server from '../index';
 import UserController from '../controllers/user';
 
 chai.use(chaiHttp);
@@ -70,7 +70,7 @@ describe('Testing Users Endpoints', () => {
       .post('/api/v1/auth/signin')
       .send({
         email: 'dami@gmail.com',
-        password: 'pass2',
+        password: 'damipass',
       })
       .end((err, res) => {
         res.should.have.status(200);
@@ -89,7 +89,7 @@ describe('Testing Users Endpoints', () => {
       .post('/api/v1/auth/signin')
       .send({
         email: 'dam@gmail.com',
-        password: 'pass2',
+        password: 'damipass',
       })
       .end((err, res) => {
         res.should.have.status(400);
