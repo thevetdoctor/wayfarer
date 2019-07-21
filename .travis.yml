@@ -8,20 +8,18 @@ cache:
   - 'node_modules'
 
 addons:
-  postgresql: '9.6'
+  postgres: '9.6'
+
+before_script:
+  - ./cc-test-reporter before-build
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+
 
 env:
   global:
     - CC_TEST_REPORTER_ID=9c5b4eaa01524a9d39b197ce61b9c062d6a5bc20ddf9f1acb1e217471b6e87b2
     - NODE_ENV=test
-
-before_script:
-  - psql -c 'create database wayfare_testdb;' -U postgres
-  - psql -c 'create user with password animalworld;' -U postgres
-  - ./cc-test-reporter before-build
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - npm run migrate
 
 
 script:
@@ -31,5 +29,4 @@ after_success:
  - npm run cover
 
 after_script:
-  - ./cc-test-reporter after-build --exit-code $
-
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
