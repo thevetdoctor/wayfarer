@@ -49,7 +49,6 @@ before((done) => {
             .post('/api/v1/bookings')
             .set('Authorization', `Bearer ${adminToken}`)
             .send({
-              user_id: 1,
               trip_id: 4,
             })
             .end((err, res) => {
@@ -64,32 +63,30 @@ before((done) => {
           done();
         });
 
-        it('Create Booking method (POST) should return ERROR if user is not registered', (done) => {
-          chai.request(server)
-            .post('/api/v1/bookings')
-            .set('Authorization', `Bearer ${adminToken}`)
-            .send({
-              user_id: 0,
-              trip_id: 4,
-            })
-            .end((err, res) => {
-              res.should.have.status(404);
-              res.should.be.json;
-              res.body.should.be.a('object');
-              res.body.should.be.have.property('status');
-              res.body.should.be.have.property('error');
-              res.body.status.should.equal(404);
-              res.body.error.should.be.a('string');
-            });
-          done();
-        });
+        // it('Create Booking method (POST) should return ERROR if user is not registered', (done) => {
+        //   chai.request(server)
+        //     .post('/api/v1/bookings')
+        //     .set('Authorization', `Bearer ${adminToken.concat('j')}`)
+        //     .send({
+        //       tripId: 4,
+        //     })
+        //     .end((err, res) => {
+        //       res.should.have.status(404);
+        //       res.should.be.json;
+        //       res.body.should.be.a('object');
+        //       res.body.should.be.have.property('status');
+        //       res.body.should.be.have.property('error');
+        //       res.body.status.should.equal(404);
+        //       res.body.error.should.be.a('string');
+        //     });
+        //   done();
+        // });
 
         it('Create Booking method (POST) should return ERROR if trip is not available', (done) => {
           chai.request(server)
             .post('/api/v1/bookings')
             .set('Authorization', `Bearer ${adminToken}`)
             .send({
-              user_id: 2,
               trip_id: 0,
             })
             .end((err, res) => {
@@ -109,7 +106,6 @@ before((done) => {
             .post('/api/v1/bookings')
             .set('Authorization', `Bearer ${adminToken}`)
             .send({
-              user_id: 2,
               trip_id: 1,
             })
             .end((err, res) => {
@@ -129,7 +125,6 @@ before((done) => {
             .post('/api/v1/bookings')
             .set('Authorization', `Bearer ${adminToken}`)
             .send({
-              user_id: 3,
               trip_id: 5,
             })
             .end((err, res) => {
@@ -149,7 +144,6 @@ before((done) => {
             .post('/api/v1/bookings')
             .set('Authorization', `Bearer ${adminToken}`)
             .send({
-              user_id: 3,
               trip_id: 2,
             })
             .end((err, res) => {

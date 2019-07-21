@@ -40,7 +40,8 @@ class UserController {
 
           user.create(user.details, res);
         }
-      });
+      })
+      .catch(err => console.log(err));
   }
 
 

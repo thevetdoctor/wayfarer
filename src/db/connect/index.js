@@ -7,6 +7,7 @@ const herokuConfig = require('../config/herokuConfig');
 // import { Client } from 'pg';
 // import configString from '../config';
 // import herokuconfig from '../config/herokuConfig';
+const elephantSql = 'postgres://lfaecjqh:Ylkv8kvpO0_KsA_LJ3VtWs1rOiQld1An@raja.db.elephantsql.com:5432/lfaecjqh';
 
 
 let db;
@@ -25,7 +26,8 @@ if (process.env.NODE_ENV === 'production') {
   // console.log('wayfare DB');
   console.log('wayfare_test DB');
   // db = new Client(herokuconfig);
-  db = new Client(testConfig);
+  db = new Client(elephantSql);
+  // db = new Client(testConfig);
   // db = new Client(data);
 }
 
