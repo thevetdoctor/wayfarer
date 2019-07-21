@@ -7,6 +7,9 @@ import chaiHttp from 'chai-http';
 import server from '../index';
 import UserController from '../controllers/user';
 
+const count = Math.floor(Math.random() * 100);
+console.log(count);
+
 chai.use(chaiHttp);
 should();
 
@@ -23,10 +26,10 @@ describe('Testing Users Endpoints', () => {
     chai.request(server)
       .post('/api/v1/auth/signup')
       .send({
-        email: 'email@email.com',
-        firstName: 'test',
-        lastName: 'test',
-        password: 'pass_test',
+        email: `email${count}@email.com`,
+        first_name: 'test',
+        last_name: 'test',
+        password: 'passtest',
       })
       .end((err, res) => {
         res.should.have.status(201);
@@ -45,8 +48,8 @@ describe('Testing Users Endpoints', () => {
       .post('/api/v1/auth/signup')
       .send({
         email: 'dami@gmail.com',
-        firstName: 'test',
-        lastName: 'test',
+        first_name: 'test',
+        last_name: 'test',
         password: 'pass_test',
       })
       .end((err, res) => {
