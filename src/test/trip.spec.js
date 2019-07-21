@@ -64,7 +64,7 @@ before((done) => {
           done();
         });
 
-        it('Create Trip method (POST) should return ERROR if bus_id does not exist', (done) => {
+        it('Create Trip method (POST) should return ERROR if busId does not exist', (done) => {
           chai.request(server)
             .post('/api/v1/trips')
             .set('Authorization', `Bearer ${adminToken}`)
@@ -123,7 +123,7 @@ before((done) => {
               res.body.should.be.have.property('status');
               res.body.should.be.have.property('data');
               res.body.status.should.equal(200);
-              res.body.data.should.be.a('object');
+              res.body.data.should.be.a('array');
             });
           done();
         });

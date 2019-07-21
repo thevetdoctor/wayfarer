@@ -29,57 +29,112 @@ const {
 
 
 class BookingController {
-  static async createBooking(req, res) {
-    console.log('enter create booking');
+  static createBooking(req, res) {
     const { trip_id } = req.body;
     const user_id = req.token.id;
 
-    const booking = new Booking(user_id, trip_id);
+    // const newBooking = new Booking(userId, tripId);
+    const updateData = [trip_id];
     const bookingData = [user_id, trip_id];
 
-    try {
-      const foundUser = await booking.userCheck(user_id, res);
 
-      const rows = await booking.checkTrip(trip_id, res);
+    db.query(checkUserQuery)
+      .then((result) => {
+        const foundUser = result.rows.filter(user => user.id === parseInt(user_id, 10));
+        if (foundUser.length < 1) {
+          res.status(404).json({
+            status: 404,
+            error: 'User not registered',
+          });
+          return;
+        }
+        console.log('found user', foundUser);
 
-      if (rows.length < 1) {
-        return Booking.notAvailable(res);
-      }
+        db.query(getTripsQuery, [trip_id])
+          .then((result1) => {
+            const foundTrip = result1.rows[0];
 
-      const foundTrip = rows[0];
-      if (foundTrip.status === 'cancelled') {
-        return Booking.tripCancelled(res);
-      }
+            if (!foundTrip) {
+              res.status(404).json({
+                status: 404,
+                error: 'Trip is not available',
+              });
+              return;
+            }
 
-      if (foundTrip.booking_status === foundTrip.capacity) {
-        return Booking.fullyBooked(res);
-      }
+            if (foundTrip.status === 'cancelled') {
+              res.status(404).json({
+                status: 404,
+                error: 'Trip has been cancelled',
+              });
+              return;
+            }
 
-      const booked = await booking.checkBooking(user_id, trip_id);
+            if (foundTrip.booking_status === foundTrip.capacity) {
+              res.status(404).json({
+                status: 404,
+                error: 'Sorry please, No more empty seats- Trip is fully booked',
+              });
+              return;
+            }
 
-      if (booked[0]) {
-        return Booking.alreadyBooked(res);
-      }
 
-      const update = await booking.updateTrip(updateTripQuery, [trip_id]);
-      const tripUpdate = update[0];
-      const seatNo = tripUpdate.booked_seats[tripUpdate.booked_seats.length - 1];
-      console.log('seat no', seatNo);
+            db.query(checkBookingQuery, bookingData)
+              .then((result2) => {
+                const tripBooked = result2.rows[0];
+                console.log(result2.rows[0]);
 
-      const moreBookingData = [foundTrip.bus_id, foundTrip.origin, foundTrip.destination, tripUpdate.trip_date, seatNo];
-      const completeBookingData = [...bookingData, ...moreBookingData];
+                if (tripBooked) {
+                  res.status(404).json({
+                    status: 404,
+                    error: 'You are booked on this trip already',
+                  });
+                  return;
+                }
 
-      console.log('exit create booking');
-      const newBooking = await booking.makeBooking(tripUpdate, completeBookingData, res);
-      return Booking.newBooking(newBooking, res);
-    } catch (err) {
-      return res.status(500).json({
-        status: 500,
-        err,
-      });
-    }
+                db.query(updateTripQuery, updateData)
+                  .then((result3) => {
+                    const tripUpdate = result3.rows[0];
+                    const seatNo = tripUpdate.booked_seats[tripUpdate.booked_seats.length - 1];
+                    console.log('seat no', seatNo);
+
+                    const moreBookingData = [foundTrip.bus_id, foundTrip.origin, foundTrip.destination, tripUpdate.trip_date, seatNo];
+                    const completeBookingData = [...bookingData, ...moreBookingData];
+
+                    db.query(bookingQuery, completeBookingData)
+                      .then((result4) => {
+                        const booking = result4.rows[0];
+
+                        const data = {
+                          booking_id: booking.id,
+                          user_id: booking.user_id,
+                          trip_id: booking.trip_id,
+                          bus_id: booking.bus_id,
+                          origin: booking.origin,
+                          destination: booking.destination,
+                          trip_date: tripUpdate.trip_date,
+                          seat_number: tripUpdate.booking_status,
+                          first_name: foundUser[0].first_name,
+                          last_name: foundUser[0].last_name,
+                          email: foundUser[0].email,
+                          message: 'Your trip has been booked',
+                        };
+
+                        res.status(201).json({
+                          status: 201,
+                          data,
+                        });
+                      })
+                      .catch(err => console.log(err));
+                  })
+                  .catch(err => console.log(err));
+              })
+              .catch(err => console.log(err));
+          })
+          .catch(err => console.log(err));
+      })
+      .catch(err => console.log(err));
   }
-
 
   static getBookings(req, res) {
     const { id, is_admin } = req.token;
