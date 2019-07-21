@@ -8,20 +8,14 @@ cache:
   - 'node_modules'
 
 addons:
-  apt:
-    update: true
+  postgres: '9.6'
 
-services :
-  - postgresql
-
-postgres:
-  adapter: postgresql
-  database: wayfare_testdb
-  username: postgres
-
-# before_script:
+before_script:
   - psql -c 'create database wayfare_testdb;' -U postgres
-  - psql -c 'create user with password animalworld;' -U postgres
+  - psql -c 'create user postgres with password animalworld;' -U postgres
+  - ./cc-test-reporter before-build
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
 
 
 env:
@@ -29,42 +23,12 @@ env:
     - CC_TEST_REPORTER_ID=9c5b4eaa01524a9d39b197ce61b9c062d6a5bc20ddf9f1acb1e217471b6e87b2
     - NODE_ENV=test
 
-before_script:
-  # - chmod 0777 ./node_modules/.bin/mocha
-  - ./cc-test-reporter before-build
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
 
 script:
+ - npm test
+
+after_success:
  - npm run cover
- - npm run coveralls
 
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
-
-
-
-# language: node_js
-# node_js:
-#  - "stable"
-
-# cache:
-#   directories:
-#     - "node_modules"
-
-# addons:
-#   apt:
-#     update: true
-
-# services :
-#   - postgresql
-
-# postgres:
-#   adapter: postgresql
-#   database: DB_DATABASE
-#   username: postgres
-
-# before_script:
-#   - psql -c 'create database wayfare_testdb;' -U postgres
-
-# after_success: npm run coverage
