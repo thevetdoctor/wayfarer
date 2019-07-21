@@ -11,9 +11,7 @@ addons:
   postgres: '9.6'
 
 before_script:
-  - psql -c 'create database wayfare_testdb;' -U postgres
-  - psql -c 'create user postgres with password animalworld;' -U postgres
-  - ./cc-test-reporter before-build
+    # - ./cc-test-reporter before-build
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
 
@@ -32,3 +30,6 @@ after_success:
 
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+
+  # - psql -c 'create database wayfare_testdb;' -U postgres
+  # - psql -c 'create user postgres with password animalworld;' -U postgres
