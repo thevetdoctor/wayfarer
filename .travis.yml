@@ -23,6 +23,7 @@ postgres:
   - psql -c 'create database wayfare_testdb;' -U postgres
   - psql -c 'create user with password animalworld;' -U postgres
 
+
 env:
   global:
     - CC_TEST_REPORTER_ID=9c5b4eaa01524a9d39b197ce61b9c062d6a5bc20ddf9f1acb1e217471b6e87b2
