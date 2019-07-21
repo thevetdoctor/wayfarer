@@ -6,7 +6,7 @@
 /* eslint-disable no-unused-expressions */
 import chai, { should } from 'chai';
 import chaiHttp from 'chai-http';
-import server from '../../index';
+import server from '../index';
 import BookingController from '../controllers/booking';
 
 chai.use(chaiHttp);
@@ -20,7 +20,7 @@ before((done) => {
     .post('/api/v1/auth/signin')
     .send({
       email: 'oba@gmail.com',
-      password: 'pass1',
+      password: 'obapass',
     })
     .end((err, res) => {
       res.should.have.status(200);
@@ -49,8 +49,7 @@ before((done) => {
             .post('/api/v1/bookings')
             .set('Authorization', `Bearer ${adminToken}`)
             .send({
-              userId: 2,
-              tripId: 4,
+              trip_id: 4,
             })
             .end((err, res) => {
               res.should.have.status(201);
@@ -64,33 +63,31 @@ before((done) => {
           done();
         });
 
-        it('Create Booking method (POST) should return ERROR if user is not registered', (done) => {
-          chai.request(server)
-            .post('/api/v1/bookings')
-            .set('Authorization', `Bearer ${adminToken}`)
-            .send({
-              userId: 0,
-              tripId: 4,
-            })
-            .end((err, res) => {
-              res.should.have.status(404);
-              res.should.be.json;
-              res.body.should.be.a('object');
-              res.body.should.be.have.property('status');
-              res.body.should.be.have.property('error');
-              res.body.status.should.equal(404);
-              res.body.error.should.be.a('string');
-            });
-          done();
-        });
+        // it('Create Booking method (POST) should return ERROR if user is not registered', (done) => {
+        //   chai.request(server)
+        //     .post('/api/v1/bookings')
+        //     .set('Authorization', `Bearer ${adminToken.concat('j')}`)
+        //     .send({
+        //       tripId: 4,
+        //     })
+        //     .end((err, res) => {
+        //       res.should.have.status(404);
+        //       res.should.be.json;
+        //       res.body.should.be.a('object');
+        //       res.body.should.be.have.property('status');
+        //       res.body.should.be.have.property('error');
+        //       res.body.status.should.equal(404);
+        //       res.body.error.should.be.a('string');
+        //     });
+        //   done();
+        // });
 
         it('Create Booking method (POST) should return ERROR if trip is not available', (done) => {
           chai.request(server)
             .post('/api/v1/bookings')
             .set('Authorization', `Bearer ${adminToken}`)
             .send({
-              userId: 2,
-              tripId: 0,
+              trip_id: 0,
             })
             .end((err, res) => {
               res.should.have.status(404);
@@ -109,8 +106,7 @@ before((done) => {
             .post('/api/v1/bookings')
             .set('Authorization', `Bearer ${adminToken}`)
             .send({
-              userId: 2,
-              tripId: 1,
+              trip_id: 1,
             })
             .end((err, res) => {
               res.should.have.status(404);
@@ -129,8 +125,7 @@ before((done) => {
             .post('/api/v1/bookings')
             .set('Authorization', `Bearer ${adminToken}`)
             .send({
-              userId: 3,
-              tripId: 5,
+              trip_id: 5,
             })
             .end((err, res) => {
               res.should.have.status(404);
@@ -149,8 +144,7 @@ before((done) => {
             .post('/api/v1/bookings')
             .set('Authorization', `Bearer ${adminToken}`)
             .send({
-              userId: 3,
-              tripId: 2,
+              trip_id: 2,
             })
             .end((err, res) => {
               res.should.have.status(404);

@@ -1,5 +1,6 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-console */
+/* eslint-disable max-len */
 /* eslint-disable no-unused-vars */
 /* eslint-disable camelcase */
 /* eslint-disable no-plusplus */
@@ -35,8 +36,8 @@ class TripController {
     trip.findBus(trip.bus_id, res)
       .then((bus) => {
         if (!bus.length) {
-          res.status(400).json({
-            status: 400,
+          res.status(404).json({
+            status: 404,
             error: `Bus with ID ${trip.bus_id} not registered`,
           });
         } else {

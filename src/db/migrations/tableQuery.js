@@ -34,18 +34,18 @@ const tripTable = `CREATE TABLE IF NOT EXISTS trips (
 
 const bookingTable = `CREATE TABLE IF NOT EXISTS bookings(
                     id SERIAL NOT NULL,
-                    trip_id INT NOT NULL,
-                    user_id INT NOT NULL,
+                    trip_id INT NOT NULL REFERENCES trips,
+                    user_id INT NOT NULL REFERENCES users,
                     bus_id INT NOT NULL,
                     origin TEXT NOT NULL,
                     destination TEXT NOT NULL,
                     trip_date TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
                     seat_number INT DEFAULT 0,
                     created_on TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-                    PRIMARY KEY(trip_id, user_id),
-                    FOREIGN KEY (trip_id) REFERENCES trips (id),
-                    FOREIGN KEY (user_id) REFERENCES users (id)
-                    );`;
+                    PRIMARY KEY(trip_id, user_id));`;
+
+// FOREIGN KEY(trip_id) REFERENCES trips(id),
+//     FOREIGN KEY(user_id) REFERENCES users(id)
 
 const deletedTable = `CREATE TABLE IF NOT EXISTS deletedbookings (
                         id SERIAL PRIMARY KEY,

@@ -5,7 +5,7 @@
 /* eslint-disable no-unused-expressions */
 import chai, { should } from 'chai';
 import chaiHttp from 'chai-http';
-import server from '../../index';
+import server from '../index';
 import TripController from '../controllers/trip';
 
 chai.use(chaiHttp);
@@ -18,7 +18,7 @@ before((done) => {
     .post('/api/v1/auth/signin')
     .send({
       email: 'oba@gmail.com',
-      password: 'pass1',
+      password: 'obapass',
     })
     .end((err, res) => {
       res.should.have.status(200);
@@ -47,7 +47,7 @@ before((done) => {
             .post('/api/v1/trips')
             .set('Authorization', `Bearer ${adminToken}`)
             .send({
-              busId: 3,
+              bus_id: 3,
               origin: 'LAGOS',
               destination: 'LONDON',
               fare: 4500,
@@ -59,17 +59,17 @@ before((done) => {
               res.body.should.be.have.property('status');
               res.body.should.be.have.property('data');
               res.body.status.should.equal(201);
-              res.body.data.should.be.a('string');
+              res.body.data.should.be.a('object');
             });
           done();
         });
 
-        it('Create Trip method (POST) should return ERROR if busId does not exist', (done) => {
+        it('Create Trip method (POST) should return ERROR if bus_id does not exist', (done) => {
           chai.request(server)
             .post('/api/v1/trips')
             .set('Authorization', `Bearer ${adminToken}`)
             .send({
-              busId: 0,
+              bus_id: 0,
               origin: 'LAGOS',
               destination: 'LONDON',
               fare: 4500,
@@ -91,7 +91,7 @@ before((done) => {
             .post('/api/v1/trips')
             .set('Authorization', `Bearer ${adminToken}`)
             .send({
-              busId: 1,
+              bus_id: 1,
               origin: 'LAGOS',
               destination: 'LONDON',
               fare: 4500,
